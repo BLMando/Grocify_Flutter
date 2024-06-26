@@ -1,59 +1,16 @@
-# Flutter MVVM Template
+# prova_flutter
 
-This is a Flutter project template that follows the MVVM (Model-View-ViewModel) architectural pattern. It provides a starting point for building scalable and maintainable Flutter applications using the Provider state management library.
+A new Flutter project.
 
-## Project Structure
+## Getting Started
 
-The project structure is organized as follows:
+This project is a starting point for a Flutter application.
 
-```sql
-lib
-├── data
-│   ├── local
-│   ├── remote
-│   │   ├── network
-│   │   └── response
-│   └── app.exceptions.dart
-├── models
-├── repository
-├── res
-│   ├── colors
-│   ├── dimensions
-│   ├── app.context.extension.dart
-│   └── resources.dart
-├── utils
-├── view
-│   ├── screens
-│   └── shared
-├── view_model
-└── main.dart
-```
+A few resources to get you started if this is your first Flutter project:
 
+- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-- `lib/data`: Contains data-related classes and modules.
-  - `local`: Contains local data storage implementations.
-  - `remote`: Contains remote data-related classes and modules.
-    - `network`: Contains network-related classes and modules.
-    - `response`: Contains response model classes for network requests.
-  - `app.exceptions.dart`: Provides custom exception classes for the application.
-
-- `lib/models`: Contains data models used throughout the application.
-
-- `lib/repository`: Contains the repository layer, which acts as a mediator between the data layer and the view models.
-
-- `lib/res`: Contains resource-related files such as colors, dimensions, and context extension.
-  - `colors`: Defines color constants for the application.
-  - `dimensions`: Contains dimension constants used for layout and styling.
-  - `app.context.extension.dart`: Contains extension methods for the `BuildContext` class.
-  - `resources.dart`: Imports and exports all the resource files for easy access.
-
-- `lib/utils`: Contains utility classes and functions used across the application.
-
-- `lib/view`: Contains the UI-related files.
-  - `screens`: Contains individual screens or pages of the application.
-  - `shared`: Contains shared UI components used across multiple screens.
-
-- `lib/view_model`: Contains the view models that handle the business logic for each screen.
-
-- `lib/main.dart`: Entry point of the application.
-
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.

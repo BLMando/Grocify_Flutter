@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.dev" "\0"
-            VALUE "FileDescription", "mvvm" "\0"
+            VALUE "CompanyName", "com.example" "\0"
+            VALUE "FileDescription", "prova_flutter" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "mvvm" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2023 com.dev. All rights reserved." "\0"
-            VALUE "OriginalFilename", "mvvm.exe" "\0"
-            VALUE "ProductName", "mvvm" "\0"
+            VALUE "InternalName", "prova_flutter" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2024 com.example. All rights reserved." "\0"
+            VALUE "OriginalFilename", "prova_flutter.exe" "\0"
+            VALUE "ProductName", "prova_flutter" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

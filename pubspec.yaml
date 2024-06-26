@@ -1,5 +1,5 @@
-name: mvvm
-description: A new Flutter project.
+name: grocify
+description: "Grocify App"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.1 <4.0.0'
+  sdk: '>=3.4.1 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -34,9 +34,12 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
-  http: ^0.13.4
+  cupertino_icons: ^1.0.6
+  http: ^1.2.1
   provider: ^6.0.0
+  firebase_auth: ^5.1.0
+  firebase_core: ^3.1.0
+  cloud_firestore: ^5.0.1
 
 dev_dependencies:
   flutter_test:
@@ -47,13 +50,16 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.0
+  flutter_lints: ^4.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
 flutter:
+  assets:
+   - assets/images/
+   - assets/images/icon.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
