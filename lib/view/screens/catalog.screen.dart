@@ -109,7 +109,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
         elevation: 6,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Flexible(
@@ -118,7 +118,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
                 borderRadius: BorderRadius.circular(20),
                 child: Image.network(
                   category.image!,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fitWidth,
                   loadingBuilder: (context, child, loadingProgress) {
                     if (loadingProgress == null) return child;
                     return const Center(
@@ -130,7 +130,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
               ),
             ),
             Flexible(
-              flex: 1, // Adjust the flex values as needed
+              flex: 1,
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Text(

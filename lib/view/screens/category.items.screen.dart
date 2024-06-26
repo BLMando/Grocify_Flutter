@@ -106,7 +106,7 @@ class _CategoryItemsScreenState extends State<CategoryItemsScreen> {
               ),
           ),
 
-          const SizedBox(height: 10),
+          const SizedBox(height: 5),
 
           Flexible(
             child:
@@ -145,6 +145,7 @@ class _CategoryItemsScreenState extends State<CategoryItemsScreen> {
                 ),
               )
                   : RichText(
+                textAlign: TextAlign.center,
                 text: TextSpan(
                   children: [
                     TextSpan(
@@ -172,7 +173,6 @@ class _CategoryItemsScreenState extends State<CategoryItemsScreen> {
 
           Flexible(
               child: ElevatedButton(
-
                 style: const ButtonStyle(
                     backgroundColor: WidgetStatePropertyAll(AppColors.blueDark)
                 ),
