@@ -1,39 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:grocify/firebase/auth.service.dart';
 import 'package:grocify/models/category.model.dart';
 import 'package:grocify/view_model/catalog.view.model.dart';
 import 'package:provider/provider.dart';
-
 import 'category.items.screen.dart';
 
-class CatalogScreen extends StatefulWidget{
+class CatalogScreen extends StatelessWidget{
   static const String id = "catalog_screen";
 
-  const CatalogScreen({Key? key}) : super(key: key);
-
-  @override
-  _CatalogScreenState createState() => _CatalogScreenState();
-}
-
-class _CatalogScreenState extends State<CatalogScreen> {
-
-  late final CatalogViewModel viewModel;
-
-  @override
-  void initState() {
-    super.initState();
-    viewModel = CatalogViewModel();
-    viewModel.getSignedInUserName();
-    viewModel.getCategories();
-  }
+  const CatalogScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final CatalogViewModel viewModel = CatalogViewModel();
+
     return ChangeNotifierProvider<CatalogViewModel>.value(
-        value: viewModel,
-        child: Consumer<CatalogViewModel>(
-            builder: (context, viewModel, child) {
-              return Scaffold(
+      value: viewModel,
+      child: Consumer<CatalogViewModel>(
+        builder: (context, viewModel, child) {
+          viewModel.getSignedInUserName();
+          viewModel.getCategories();
+
+          return Scaffold(
                 appBar: AppBar(
                     elevation: 6,
                     surfaceTintColor: Colors.white,
@@ -85,20 +72,19 @@ class _CatalogScreenState extends State<CatalogScreen> {
                         ),
                         itemBuilder: (context, index) {
                           final category = viewModel.categories[index];
-                          return _categoryCard(category);
+                          return _categoryCard(context,category);
                         },
                       ),
                     ],
                   ),
                 ),
-
               );
-            }
-        )
+        }
+      )
     );
   }
 
-  Widget _categoryCard(CategoryModel category){
+  Widget _categoryCard(BuildContext context, CategoryModel category){
     return GestureDetector(
       onTap: () {
         _goToDetailScreen(context, category.id!);
@@ -123,7 +109,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
                       child: CircularProgressIndicator(),
                     );
                   },
-                  errorBuilder: (context, error, stackTrace) => Icon(Icons.error),
+                  errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
                 ),
               ),
             ),

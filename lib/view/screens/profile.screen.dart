@@ -13,12 +13,14 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final ProfileViewModel viewModel = ProfileViewModel();
-    viewModel.getSignedInUser();
 
     return ChangeNotifierProvider<ProfileViewModel>.value(
         value: viewModel,
         child: Consumer<ProfileViewModel>(
         builder: (context, viewModel, child) {
+
+          viewModel.getSignedInUser();
+
           return Scaffold(
             appBar: AppBar(
               title: const Text(

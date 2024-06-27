@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grocify/models/user.details.model.dart';
 import 'package:provider/provider.dart';
-
 import '../../view_model/addresses.view.model.dart';
 
 class AddressesScreen extends StatelessWidget {
@@ -92,7 +91,6 @@ class AddressesScreen extends StatelessWidget {
                     )
                   else
                       AddressCard(address: addressListWithSelected.first, viewModel: viewModel),
-                      // Display the first selected address
 
                   const Padding(
                     padding: EdgeInsets.only(top: 20.0, left: 20.0),
@@ -203,13 +201,12 @@ class AddressCard extends StatelessWidget {
 }
 
 
-@immutable
 class AddressDialog extends StatelessWidget {
+
   final AddressesViewModel vieModel;
 
   AddressDialog({super.key, required this.vieModel});
 
-  // Variables for handling insert and update operations
   late TextEditingController addressNameController;
   late TextEditingController cityController;
   late TextEditingController addressController;
@@ -222,8 +219,7 @@ class AddressDialog extends StatelessWidget {
     addressController = TextEditingController(text: "");
     civicController = TextEditingController(text: "");
 
-    return //fabState
-         AlertDialog(
+    return AlertDialog(
       title: const Text(
         "Nuovo indirizzo",
         textAlign: TextAlign.center,

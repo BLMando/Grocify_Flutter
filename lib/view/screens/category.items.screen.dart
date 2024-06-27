@@ -6,37 +6,24 @@ import 'package:provider/provider.dart';
 import '../../res/colors/app.colors.dart';
 import '../../view_model/category.items.view.model.dart';
 
-class CategoryItemsScreen extends StatefulWidget{
+class CategoryItemsScreen extends StatelessWidget{
   static const String id = "category_items_screen";
-
   final String categoryId;
 
   const CategoryItemsScreen(this.categoryId, {super.key});
 
   @override
-  _CategoryItemsScreenState createState() => _CategoryItemsScreenState();
-}
-
-class _CategoryItemsScreenState extends State<CategoryItemsScreen> {
-
-  late final CategoryItemsViewModel viewModel;
-
-  @override
-  void initState(){
-    super.initState();
-    viewModel = CategoryItemsViewModel();
-    viewModel.getCategoryName(widget.categoryId);
-    viewModel.getProducts(widget.categoryId);
-  }
-
-
-  @override
   Widget build(BuildContext context) {
+    final CategoryItemsViewModel viewModel = CategoryItemsViewModel();
+
     return ChangeNotifierProvider<CategoryItemsViewModel>.value(
-        value: viewModel,
-        child: Consumer<CategoryItemsViewModel>(
-            builder: (context, viewModel, child) {
-              return Scaffold(
+      value: viewModel,
+      child: Consumer<CategoryItemsViewModel>(
+        builder: (context, viewModel, child) {
+          viewModel.getCategoryName(categoryId);
+          viewModel.getProducts(categoryId);
+
+          return Scaffold(
                 appBar: AppBar(
                   title: Text(viewModel.categoryName),
                   elevation: 6,
@@ -60,8 +47,8 @@ class _CategoryItemsScreenState extends State<CategoryItemsScreen> {
                   ),
                   ),
               );
-            }
-        )
+        }
+      )
     );
   }
 
@@ -176,7 +163,7 @@ class _CategoryItemsScreenState extends State<CategoryItemsScreen> {
                     backgroundColor: WidgetStatePropertyAll(AppColors.blueDark)
                 ),
                 onPressed: () {
-                  print("Button pressed");
+                  /*TODO*/
                 },
                 child: const Text(
                   "Aggiungi",

@@ -8,15 +8,15 @@ import 'package:provider/provider.dart';
 import '../../view_model/auth.view.model.dart';
 
 class SignInScreen extends StatefulWidget {
-  static const String id = "signin";
+  static const String id = "signin_screen";
 
   const SignInScreen({super.key});
 
   @override
-  _SignInScreenState createState() => _SignInScreenState();
+  SignInScreenState createState() =>SignInScreenState();
 }
 
-class _SignInScreenState extends State<SignInScreen>{
+class SignInScreenState extends State<SignInScreen>{
 
   late final AuthViewModel viewModel;
 

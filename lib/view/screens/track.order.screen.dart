@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-
 import '../../view_model/track.order.view.model.dart';
 
 class TrackOrderScreen extends StatelessWidget {

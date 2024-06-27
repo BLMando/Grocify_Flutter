@@ -4,16 +4,17 @@ import 'package:grocify/view/screens/cart.screen.dart';
 import 'package:grocify/view/screens/profile.screen.dart';
 import 'catalog.screen.dart';
 
+/// Widget handling the bottom navigation bar
 class HomeScreen extends StatefulWidget {
   static const String id = "home_screen";
 
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  HomeScreenState createState() => HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
   static const List<Widget> _widgetOptions = <Widget>[

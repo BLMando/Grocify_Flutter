@@ -11,31 +11,40 @@ import 'package:grocify/view/screens/track.order.screen.dart';
 import 'firebase/firebase_options.dart';
 
 
+/// Entry point of the application.
 Future<void> main() async {
+  /// Ensure that Flutter binding is initialized.
   WidgetsFlutterBinding.ensureInitialized();
+
+  /// Initialize Firebase with default options for the current platform.
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  /// Run the GrocifyApp widget as the root of the application.
   runApp(const GrocifyApp());
 }
 
-class GrocifyApp extends StatelessWidget{
+/// Root widget of the Grocify application.
+class GrocifyApp extends StatelessWidget {
   const GrocifyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-   return MaterialApp(
-     title: 'Grocify',
-     theme: ThemeData(useMaterial3: true),
-     home: const AuthStreamHandler(),
-     debugShowCheckedModeBanner: false,
-     routes: {
-       SignInScreen.id: (context) => const SignInScreen(),
-       SignUpScreen.id: (context) => const SignUpScreen(),
-       HomeScreen.id: (context) => const HomeScreen(),
-       CategoryItemsScreen.id: (context) => CategoryItemsScreen(ModalRoute.of(context)?.settings.arguments as String),
-       AddressesScreen.id: (context) => const AddressesScreen(),
-       OrdersScreen.id: (context) => const OrdersScreen(),
-       TrackOrderScreen.id : (context) => TrackOrderScreen(ModalRoute.of(context)?.settings.arguments as String),
-     },
-   );
+    /// Build the MaterialApp widget with the necessary configurations.
+    return MaterialApp(
+      title: 'Grocify',
+      theme: ThemeData(useMaterial3: true),
+      home: const AuthStreamHandler(), // Set AuthStreamHandler as the initial route
+      debugShowCheckedModeBanner: false,
+      routes: {
+        // Define named routes for navigation
+        SignInScreen.id: (context) => const SignInScreen(),
+        SignUpScreen.id: (context) => const SignUpScreen(),
+        HomeScreen.id: (context) => const HomeScreen(),
+        CategoryItemsScreen.id: (context) => CategoryItemsScreen(ModalRoute.of(context)?.settings.arguments as String),
+        AddressesScreen.id: (context) => const AddressesScreen(),
+        OrdersScreen.id: (context) => const OrdersScreen(),
+        TrackOrderScreen.id: (context) => TrackOrderScreen(ModalRoute.of(context)?.settings.arguments as String),
+      },
+    );
   }
 }

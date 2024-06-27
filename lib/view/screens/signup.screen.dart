@@ -9,15 +9,15 @@ import 'package:provider/provider.dart';
 
 
 class SignUpScreen extends StatefulWidget {
-  static const String id = "signup";
+  static const String id = "signup_screen";
 
   const SignUpScreen({super.key});
 
   @override
-  _SignUpScreenState createState() => _SignUpScreenState();
+  SignUpScreenState createState() => SignUpScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class SignUpScreenState extends State<SignUpScreen> {
 
   late final AuthViewModel viewModel;
 
@@ -237,7 +237,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             "Hai già un account? Accedi!"
                         ),
                       )
-
                     ],
                   )
               );
