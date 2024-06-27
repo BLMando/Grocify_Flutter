@@ -1,75 +1,78 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/user.model.dart';
 import '../../view_model/profile.view.model.dart';
 
-class ProfileScreen extends StatefulWidget{
+class ProfileScreen extends StatelessWidget {
   static const String id = "profile_screen";
 
-  const ProfileScreen({Key? key}) : super(key: key);
-
-  @override
-  _ProfileScreenState createState() => _ProfileScreenState();
-}
-
-class _ProfileScreenState extends State<ProfileScreen> {
-
-  late final ProfileViewModel viewModel;
-
-  @override
-  void initState() {
-    super.initState();
-    viewModel = ProfileViewModel();
-    viewModel.getSignedInUser();
-  }
+  const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Grocify account",
-          style: TextStyle(
-            fontSize: 26,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
-        ),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            // Handle back button press
-            Navigator.pop(context);
-          },
-        ),
-        shadowColor: Colors.black,
-        elevation: 10,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(10),
-            bottomRight: Radius.circular(10),
-          ),
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            UserInfo(userData: viewModel.user),
-            Column(
-              children: <Widget>[
-                UserOptions(option: "Indirizzi di spedizione", logOut: false, onTap: () {}),
-                UserOptions(option: "Storico degli ordini", logOut: false, onTap: () {}),
-              ],
+
+    final ProfileViewModel viewModel = ProfileViewModel();
+    viewModel.getSignedInUser();
+
+    return ChangeNotifierProvider<ProfileViewModel>.value(
+        value: viewModel,
+        child: Consumer<ProfileViewModel>(
+        builder: (context, viewModel, child) {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text(
+                "Grocify account",
+                style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+              centerTitle: true,
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  // Handle back button press
+                  Navigator.pop(context);
+                },
+              ),
+              shadowColor: Colors.black,
+              elevation: 10,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10),
+                ),
+              ),
             ),
-            UserOptions(option: "Esci", logOut: true, onTap: () {}),
-          ],
-        ),
-      ),
+            body: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      const SizedBox(height: 20),
+                      UserInfo(userData: viewModel.user),
+                      const SizedBox(height: 40),
+                      UserOptions(option: "Indirizzi di spedizione", logOut: false, onTap: () {_goToScreen(context,"addresses_screen");}),
+                      const SizedBox(height: 20),
+                      UserOptions(option: "Storico degli ordini", logOut: false, onTap: () {_goToScreen(context,"orders_screen");}),
+                    ],
+                  ),
+                  UserOptions(option: "Esci", logOut: true, onTap: () {viewModel.signOut();}),
+                ],
+              ),
+            ),
+          );
+        }
+        )
     );
+
   }
 }
 
@@ -174,4 +177,8 @@ class UserOptions extends StatelessWidget {
       ),
     );
   }
+}
+
+void _goToScreen(BuildContext context, String screenRoute) {
+  Navigator.pushNamed(context, screenRoute);
 }

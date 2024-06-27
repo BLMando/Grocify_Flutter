@@ -34,15 +34,14 @@ class CatalogViewModel extends ChangeNotifier {
     try{
       final querySnapshot = await FirestoreService().getCollection("categories");
 
-      for (var document in querySnapshot.docs) {
-        Map<String, dynamic> categoryMap = {
-          'id': document.id,
-          'name': document.get("nome") as String,
-          'image': document.get("immagine") as String,
-        };
-        CategoryModel category = CategoryModel.fromJson(categoryMap);
-        _categories.add(category);
-      }
+      _categories.addAll(querySnapshot.docs.map((document) {
+        return CategoryModel(
+          id: document.id,
+          name: document.get("nome") as String,
+          image: document.get("immagine") as String,
+        );
+      }).toList());
+
       notifyListeners();
     }catch(e){
       print("Error fetching categories: $e");

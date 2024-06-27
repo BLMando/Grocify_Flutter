@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grocify/models/product.model.dart';
 import 'package:grocify/res/dimensions/app.dimensions.dart';
@@ -12,7 +11,7 @@ class CategoryItemsScreen extends StatefulWidget{
 
   final String categoryId;
 
-  const CategoryItemsScreen(this.categoryId, {Key? key}) : super(key: key);
+  const CategoryItemsScreen(this.categoryId, {super.key});
 
   @override
   _CategoryItemsScreenState createState() => _CategoryItemsScreenState();
@@ -87,7 +86,7 @@ class _CategoryItemsScreenState extends State<CategoryItemsScreen> {
                     child: CircularProgressIndicator(),
                   );
                 },
-                errorBuilder: (context, error, stackTrace) => Icon(Icons.error),
+                errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
               ),
             ),
           ),

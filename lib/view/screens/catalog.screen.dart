@@ -52,10 +52,8 @@ class _CatalogScreenState extends State<CatalogScreen> {
                     ),
                     leading: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: GestureDetector(
-                        onTap: AuthService().signOut,
-                        child: Image.asset(
-                            'assets/images/icon.png')
+                      child: Image.asset(
+                          'assets/images/icon.png'
                       )
                     ),
                 ),

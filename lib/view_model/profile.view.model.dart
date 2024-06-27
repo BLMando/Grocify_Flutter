@@ -44,5 +44,9 @@ class ProfileViewModel extends ChangeNotifier {
       }
    }
 
+   void signOut(){
+      _authService.signOut();
+   }
+
 
 }
