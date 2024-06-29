@@ -1,16 +1,13 @@
-# prova_flutter
+# Grocify Flutter
+Realizzazione di una versione semplificata di Grocify usando un framework di sviluppo cross-platform.
 
-A new Flutter project.
+## Requisiti
 
-## Getting Started
+1) Login/Registrazione,
+2) Catalogo delle categorie di prodotti,
+3) Lista dei prodotti,
+4) Carrello online
+5) Profilo utente, sezione indirizzi e storico degli ordini
+7) Tracking dell'ordine
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
