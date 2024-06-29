@@ -4,6 +4,7 @@ import 'package:grocify/utils/utils.dart';
 import 'package:grocify/view/screens/track.order.screen.dart';
 import 'package:provider/provider.dart';
 import '../../models/order.model.dart';
+import '../../res/dimensions/app.dimensions.dart';
 import '../../view_model/orders.view.model.dart';
 
 class OrdersScreen extends StatelessWidget {
@@ -32,7 +33,11 @@ class OrdersScreen extends StatelessWidget {
                 appBar: AppBar(
                   title: const Text(
                     "Storico degli ordini",
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
+                    style: TextStyle(
+                      fontSize: AppDimension.appBarText,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
                   ),
                   leading: IconButton(
                     icon: const Icon(Icons.arrow_back),
@@ -47,7 +52,7 @@ class OrdersScreen extends StatelessWidget {
                       const Text(
                         "Ordine corrente",
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
+                            fontWeight: FontWeight.bold, fontSize: AppDimension.mediumText),
                       ),
                       if (currentOrder.isEmpty)
                         const Center(
@@ -55,7 +60,7 @@ class OrdersScreen extends StatelessWidget {
                             padding: EdgeInsets.symmetric(vertical: 20),
                             child: Text(
                               "Nessun ordine in corso",
-                              style: TextStyle(fontSize: 15),
+                              style: TextStyle(fontSize: AppDimension.smallText),
                             ),
                           ),
                         )
@@ -69,7 +74,7 @@ class OrdersScreen extends StatelessWidget {
                       const Text(
                         "Ordini passati",
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
+                            fontWeight: FontWeight.bold, fontSize: AppDimension.mediumText),
                       ),
                       if (pastOrders.isEmpty)
                         const Center(
@@ -77,7 +82,7 @@ class OrdersScreen extends StatelessWidget {
                             padding: EdgeInsets.symmetric(vertical: 20),
                             child: Text(
                               "Nessun ordine effettuato",
-                              style: TextStyle(fontSize: 15),
+                              style: TextStyle(fontSize: AppDimension.smallText),
                             ),
                           ),
                         )
@@ -157,20 +162,21 @@ class OrderCard extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.blueMedium),
-                    borderRadius: const BorderRadius.all(Radius.circular(30))
+                if(order.status != "concluso")
+                  Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: AppColors.blueMedium),
+                      borderRadius: const BorderRadius.all(Radius.circular(30))
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(iconState),
+                        const SizedBox(width: 5),
+                        Text(Utils.capitalizeFirstLetter(order.status)),
+                      ],
+                    ),
                   ),
-                  child: Row(
-                    children: [
-                      Icon(iconState),
-                      const SizedBox(width: 5),
-                      Text(Utils.capitalizeFirstLetter(order.status)),
-                    ],
-                  ),
-                ),
 
                 const SizedBox(height: 15),
 

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:grocify/view/screens/addresses.screen.dart';
 import 'package:grocify/view/screens/auth.stream.handler.dart';
+import 'package:grocify/view/screens/catalog.screen.dart';
 import 'package:grocify/view/screens/category.items.screen.dart';
 import 'package:grocify/view/screens/home.screen.dart';
+import 'package:grocify/view/screens/order.success.screen.dart';
 import 'package:grocify/view/screens/orders.screen.dart';
 import 'package:grocify/view/screens/signin.screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -40,10 +42,12 @@ class GrocifyApp extends StatelessWidget {
         SignInScreen.id: (context) => const SignInScreen(),
         SignUpScreen.id: (context) => const SignUpScreen(),
         HomeScreen.id: (context) => const HomeScreen(),
+        CatalogScreen.id: (context) => const CatalogScreen(),
         CategoryItemsScreen.id: (context) => CategoryItemsScreen(ModalRoute.of(context)?.settings.arguments as String),
         AddressesScreen.id: (context) => const AddressesScreen(),
         OrdersScreen.id: (context) => const OrdersScreen(),
         TrackOrderScreen.id: (context) => TrackOrderScreen(ModalRoute.of(context)?.settings.arguments as String),
+        OrderSuccessScreen.id: (context) => const OrderSuccessScreen()
       },
     );
   }

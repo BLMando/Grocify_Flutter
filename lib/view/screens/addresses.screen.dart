@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:grocify/models/user.details.model.dart';
+import 'package:grocify/res/colors/app.colors.dart';
 import 'package:provider/provider.dart';
+import '../../res/dimensions/app.dimensions.dart';
 import '../../view_model/addresses.view.model.dart';
 
 class AddressesScreen extends StatelessWidget {
@@ -27,23 +29,27 @@ class AddressesScreen extends StatelessWidget {
               title: const Text(
                 'Indirizzi di spedizione',
                 style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w500,
+                  fontSize: AppDimension.appBarText,
+                  fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
               ),
               centerTitle: true,
-              shadowColor: Colors.black,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  bottom: Radius.circular(10),
-                ),
-              ),
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () {
+                  // Handle back button press
                   Navigator.pop(context);
                 },
+              ),
+              shadowColor: Colors.black,
+              surfaceTintColor: Colors.white,
+              elevation: AppDimension.highElevation,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10),
+                ),
               ),
             ),
             floatingActionButton: FloatingActionButton(
@@ -53,7 +59,7 @@ class AddressesScreen extends StatelessWidget {
                   builder: (BuildContext context) => AddressDialog(vieModel: viewModel)
                 );
               },
-              backgroundColor: Colors.blue[900], // BlueDark equivalent
+              backgroundColor: AppColors.blueDark,
               child: const Icon(
                 Icons.add,
                 size: 30,
@@ -71,7 +77,7 @@ class AddressesScreen extends StatelessWidget {
                     child: Text(
                       "Indirizzo corrente",
                       style: TextStyle(
-                        fontSize: 20.0,
+                        fontSize: AppDimension.mediumText,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -83,7 +89,7 @@ class AddressesScreen extends StatelessWidget {
                         child: Text(
                           "Nessun indirizzo attualmente in uso",
                           style: TextStyle(
-                            fontSize: 15.0,
+                            fontSize: AppDimension.smallText,
                             fontWeight: FontWeight.normal,
                           ),
                         ),
@@ -97,7 +103,7 @@ class AddressesScreen extends StatelessWidget {
                     child: Text(
                       "Indirizzi disponibili",
                       style: TextStyle(
-                        fontSize: 20.0,
+                        fontSize: AppDimension.mediumText,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -110,7 +116,7 @@ class AddressesScreen extends StatelessWidget {
                         child: Text(
                           "Nessun altro indirizzo disponibile",
                           style: TextStyle(
-                            fontSize: 15.0,
+                            fontSize: AppDimension.smallText,
                             fontWeight: FontWeight.normal,
                           ),
                         ),
@@ -144,11 +150,11 @@ class AddressCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 6,
+      elevation: AppDimension.mediumElevation,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
-      shadowColor: address.selected ? Colors.blue[900] : Colors.black,
+      shadowColor: address.selected ? AppColors.blueDark : Colors.black,
       margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
       child: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -225,7 +231,7 @@ class AddressDialog extends StatelessWidget {
         textAlign: TextAlign.center,
         style: TextStyle(
           fontWeight: FontWeight.bold,
-          fontSize: 20,
+          fontSize: AppDimension.mediumText,
 
         ),
       ),
@@ -313,7 +319,7 @@ class AddressDialog extends StatelessWidget {
       decoration: InputDecoration(
         labelText: labelText,
         focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.blue),
+          borderSide: const BorderSide(color: AppColors.blueMedium),
           borderRadius: BorderRadius.circular(8),
         ),
         enabledBorder: OutlineInputBorder(

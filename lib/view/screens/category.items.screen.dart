@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:grocify/models/product.model.dart';
-import 'package:grocify/res/dimensions/app.dimensions.dart';
 import 'package:provider/provider.dart';
-
 import '../../res/colors/app.colors.dart';
+import '../../res/dimensions/app.dimensions.dart';
 import '../../view_model/category.items.view.model.dart';
 
-class CategoryItemsScreen extends StatelessWidget{
+class CategoryItemsScreen extends StatelessWidget {
   static const String id = "category_items_screen";
   final String categoryId;
 
@@ -17,164 +16,224 @@ class CategoryItemsScreen extends StatelessWidget{
     final CategoryItemsViewModel viewModel = CategoryItemsViewModel();
 
     return ChangeNotifierProvider<CategoryItemsViewModel>.value(
-      value: viewModel,
-      child: Consumer<CategoryItemsViewModel>(
-        builder: (context, viewModel, child) {
-          viewModel.getCategoryName(categoryId);
-          viewModel.getProducts(categoryId);
-
-          return Scaffold(
+        value: viewModel,
+        child: Consumer<CategoryItemsViewModel>(
+            builder: (context, viewModel, child) {
+              viewModel.getCategoryName(categoryId);
+              viewModel.getProducts(categoryId);
+              return Scaffold(
                 appBar: AppBar(
-                  title: Text(viewModel.categoryName),
-                  elevation: 6,
+                  title: Text(
+                      viewModel.categoryName,
+                      style: const TextStyle(
+                        fontSize: AppDimension.appBarText,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                  ),
+                  centerTitle: true,
+                  leading: IconButton(
+                    icon: const Icon(Icons.arrow_back),
+                    onPressed: () {
+                      // Handle back button press
+                      Navigator.pop(context);
+                    },
+                  ),
+                  shadowColor: Colors.black,
                   surfaceTintColor: Colors.white,
+                  elevation: AppDimension.highElevation,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10),
+                    ),
+                  ),
                 ),
                 body: Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: viewModel.products.length,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 10,
-                      crossAxisSpacing: 10,
-                    ),
-                    itemBuilder: (context, index) {
-                      final category = viewModel.products[index];
-                      return _productCard(category);
-                    },
+                  child: Column(
+                    children: [
+                      if (viewModel.products.isNotEmpty)
+                        Expanded(
+                          child: GridView.builder(
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                            ),
+                            itemCount: viewModel.products.length,
+                            itemBuilder: (context, index) {
+                              return CategoryItemCard(
+                                product: viewModel.products[index],
+                              );
+                            },
+                          ),
+                        )
+                      else
+                        const Expanded(
+                          child: Center(
+                            child: Text(
+                              textAlign: TextAlign.center,
+                              "Nessun prodotto presente in questa categoria",
+                              style: TextStyle(
+                                fontSize: AppDimension.mediumText,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
-                  ),
+                ),
               );
-        }
-      )
+            }
+        )
     );
   }
+}
 
-  Widget _productCard(ProductModel product) {
+class CategoryItemCard extends StatefulWidget {
+  final ProductModel product;
+
+  const CategoryItemCard({super.key, required this.product});
+
+  @override
+  CategoryItemState createState() => CategoryItemState();
+
+}
+class CategoryItemState extends State<CategoryItemCard>{
+
+  late bool isAddingToCart;
+
+  @override
+  void initState() {
+    super.initState();
+    isAddingToCart = false;
+  }
+
+  void updateState() {
+    setState(() {
+      isAddingToCart = !isAddingToCart;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
     return Card(
-      elevation: 6,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Flexible(
-            flex: 3, // Adjust the flex values as needed
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Image.network(
-                product.image,
-                fit: BoxFit.cover,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
-                errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
-              ),
+      color: Colors.white,
+        elevation: AppDimension.mediumElevation,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(5),
+        child:Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+
+            Flexible(
+                flex: 12,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(30.0),
+                  child: Image.network(
+                    widget.product.image,
+                    width: double.infinity,
+                    height: 120,
+                    fit: BoxFit.cover,
+                  ),
+                )
             ),
-          ),
 
-          const SizedBox(height: 10),
-
-          Flexible(
+            Flexible(
+              flex: 4,
               child: Text(
-                    product.name,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.5,
-                    ),
-                    textAlign: TextAlign.center,
-              ),
-          ),
-
-          const SizedBox(height: 5),
-
-          Flexible(
-            child:
-              product.discount != 0.0
-                  ? RichText(
+                widget.product.name,
                 textAlign: TextAlign.center,
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: "${product.price.toStringAsFixed(2)}€",
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red,
-                        decoration: TextDecoration.lineThrough,
-                      ),
-                    ),
-                    const TextSpan(text: " "),
-                    TextSpan(
-                      text: "${(product.price * (100.0 - product.discount) / 100.0).toStringAsFixed(2)}€",
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                    TextSpan(
-                      text: "/${product.quantity}",
-                      style: const TextStyle(
-                        fontSize: 13,
-                        color: Colors.grey,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+                style: const TextStyle(
+                  fontSize: AppDimension.defaultText,
+                  color: Color(0xFF3f4145),
                 ),
               )
-                  : RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: "${product.price.toStringAsFixed(2)}€",
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                    TextSpan(
-                      text: "/${product.quantity}",
-                      style: const TextStyle(
-                        fontSize: 13,
-                        color: Colors.grey,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-          ),
+            ),
 
-          const SizedBox(height: 10),
+            Flexible(
+              flex: 4,
+              child: widget.product.discount != 0.0 ?
+              RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "${widget.product.price}€",
+                          style: const TextStyle(
+                            fontSize: AppDimension.smallText,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red,
+                            decoration: TextDecoration.lineThrough,
+                          ),
+                        ),
+                        TextSpan(
+                          text: "${(widget.product.price * (100.0 - widget.product.discount) / 100.0).toStringAsFixed(1)}€",
+                          style: const TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        TextSpan(
+                          text: "/${widget.product.quantity}",
+                          style: const TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
 
-          Flexible(
-              child: ElevatedButton(
-                style: const ButtonStyle(
-                    backgroundColor: WidgetStatePropertyAll(AppColors.blueDark)
-                ),
-                onPressed: () {
-                  /*TODO*/
-                },
-                child: const Text(
-                  "Aggiungi",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: AppDimension.defaultText
-                  ),),
+                  :
+              Text(
+                  textAlign: TextAlign.center,
+                  "${widget.product.price}€/${widget.product.quantity}",
+                  style: const TextStyle(
+                    fontSize: AppDimension.smallText,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
               ),
-          )
-        ],
-      ),
+            ),
+
+            Flexible(
+                flex: 5,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (!isAddingToCart) {
+                      updateState();
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: isAddingToCart ? Colors.black : AppColors.blueMedium,
+                    disabledForegroundColor: AppColors.blueLight.withOpacity(0.38),
+                    disabledBackgroundColor: AppColors.blueLight.withOpacity(0.12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  child: isAddingToCart
+                      ? const CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 2,
+                  )
+                      : const Text("Aggiungi"),
+                ),
+              )
+          ],
+        )
+      )
     );
   }
 }

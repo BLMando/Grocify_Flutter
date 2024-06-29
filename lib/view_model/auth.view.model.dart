@@ -8,6 +8,9 @@ import '../models/user.model.dart';
 /// ViewModel class for managing authentication state and user actions.
 class AuthViewModel extends ChangeNotifier {
   final AuthService _authService = AuthService();
+  final FirestoreService _firestoreService = FirestoreService();
+
+
   final String procedureType;
 
   String _statusMessage = '';
@@ -80,8 +83,8 @@ class AuthViewModel extends ChangeNotifier {
       if (user == null) {
         _statusMessage = 'Sign in failed';
       }
-    } on FirebaseAuthException catch (_, e) {
-      _statusMessage = 'Error: ${e.toString()}';
+    } on FirebaseAuthException catch (e) {
+      _statusMessage = e.message.toString();
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -116,10 +119,10 @@ class AuthViewModel extends ChangeNotifier {
         );
 
         Map<String, dynamic> userMap = newUser.toJson();
-        await FirestoreService().addDocument("users", userMap);
+        await _firestoreService.addDocument("users", userMap);
       }
-    } on FirebaseAuthException catch (_, e) {
-      _statusMessage = 'Error: ${e.toString()}';
+    } on FirebaseAuthException catch (e) {
+      _statusMessage = e.message.toString();
     } finally {
       _isLoading = false;
       notifyListeners();

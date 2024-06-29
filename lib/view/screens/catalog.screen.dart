@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grocify/models/category.model.dart';
+import 'package:grocify/res/dimensions/app.dimensions.dart';
 import 'package:grocify/view_model/catalog.view.model.dart';
 import 'package:provider/provider.dart';
 import 'category.items.screen.dart';
@@ -21,121 +23,147 @@ class CatalogScreen extends StatelessWidget{
           viewModel.getCategories();
 
           return Scaffold(
-                appBar: AppBar(
-                    elevation: 6,
-                    surfaceTintColor: Colors.white,
-                    title: RichText(
-                      text: TextSpan(
-                        style: const TextStyle(fontSize: 24),
-                        children: [
-                          const TextSpan(text: "Ciao ",
-                              style: TextStyle(fontWeight: FontWeight.w300,
-                                  color: Colors.black)),
-                          TextSpan(text: viewModel.currentUserName, style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black)),
-                        ],
-                      ),
-                    ),
-                    leading: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Image.asset(
-                          'assets/images/icon.png'
-                      )
-                    ),
+            appBar: AppBar(
+              shadowColor: Colors.black,
+              elevation: AppDimension.mediumElevation,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10),
                 ),
-                body: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: ListView(
-                    children: [
-                      const Text(
-                        "Cerca per categoria",
+              ),
+              surfaceTintColor: Colors.white,
+              title: RichText(
+                text: TextSpan(
+                  style: const TextStyle(fontSize: 24),
+                  children: [
+                    const TextSpan(text: "Ciao ",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w300,
+                            color: Colors.black)
+                    ),
+                    TextSpan(
+                        text: viewModel.currentUserName,
+                        style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black)
+                    ),
+                  ],
+                ),
+              ),
+              leading: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Image.asset(
+                      'assets/images/icon.png'
+                  )
+              ),
+            ),
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child:  Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 5.0),
+                      child: Text(
+                        'Cerca per categoria',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 20,
+                          fontSize: AppDimension.mediumText,
                         ),
                       ),
-                      const Divider(
-                        color: Colors.grey,
-                        thickness: 0.6,
-                        height: 30,
-                        endIndent: 10,
-                      ),
-                      GridView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: viewModel.categories.length,
+                    ),
+
+                    const Divider(
+                      color: Colors.grey,
+                      thickness: 0.6,
+                      height: 20
+                    ),
+
+                    Expanded(
+                      child: GridView.builder(
                         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
-                          mainAxisSpacing: 10,
-                          crossAxisSpacing: 10,
                         ),
+                        itemCount: viewModel.categories.length, // Replace with uiState.value.categories.size
                         itemBuilder: (context, index) {
-                          final category = viewModel.categories[index];
-                          return _categoryCard(context,category);
+                          return CategoryCard(
+                            category: CategoryModel(
+                                id: viewModel.categories[index].id,
+                                name: viewModel.categories[index].name,
+                                image: viewModel.categories[index].image
+                            ),
+                            onCategoryClick: () {
+                              Navigator.pushNamed(context, CategoryItemsScreen.id, arguments: viewModel.categories[index].id);
+                            },
+                          );
                         },
-                      ),
-                    ],
-                  ),
+                      )
+                    ),
+                  ],
                 ),
-              );
+            )
+          );
         }
       )
     );
   }
+}
 
-  Widget _categoryCard(BuildContext context, CategoryModel category){
+class CategoryCard extends StatelessWidget {
+  final CategoryModel category;
+  final VoidCallback onCategoryClick;
+
+  const CategoryCard({super.key, required this.category, required this.onCategoryClick});
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        _goToDetailScreen(context, category.id!);
-      },
+      onTap: onCategoryClick,
       child: Card(
-        elevation: 6,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Flexible(
-              flex: 2, // Adjust the flex values as needed
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.network(
-                  category.image!,
-                  fit: BoxFit.fitWidth,
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  },
-                  errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
-                ),
-              ),
-            ),
-            Flexible(
-              flex: 1,
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Text(
-                  category.name!,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.5,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-          ],
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
         ),
-      ),
+        elevation: AppDimension.cardElevation,
+        child: Padding(
+          padding: const EdgeInsets.all(5),
+          child:Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Flexible(
+                flex: 2,
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(30.0),
+                    child: Image.network(
+                      category.image!,
+                      width: double.infinity,
+                      height: 120,
+                      fit: BoxFit.cover,
+                    ),
+                  )
+              ),
+
+              Flexible(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Text(
+                    category.name!,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: AppDimension.smallText,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.5,
+                    ),
+                  ),
+                )
+              )
+            ],
+          ),
+        ),
+      )
     );
   }
-
-
-  void _goToDetailScreen(BuildContext context, String categoryId) {
-    Navigator.pushNamed(context, CategoryItemsScreen.id, arguments: categoryId);
-  }
 }
+

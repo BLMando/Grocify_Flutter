@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:grocify/res/colors/app.colors.dart';
+import 'package:grocify/view/screens/catalog.screen.dart';
+import 'package:grocify/view/screens/home.screen.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import '../../res/dimensions/app.dimensions.dart';
 import '../../view_model/track.order.view.model.dart';
 
 class TrackOrderScreen extends StatelessWidget {
@@ -15,10 +19,18 @@ class TrackOrderScreen extends StatelessWidget {
 
     final TrackOrderViewModel viewModel = TrackOrderViewModel();
 
+    if (viewModel.order.status == "concluso") {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushNamed(context, HomeScreen.id);
+      });
+    }
+
+
     return ChangeNotifierProvider<TrackOrderViewModel>.value(
         value: viewModel,
         child: Consumer<TrackOrderViewModel>(
         builder: (context, viewModel, child) {
+
           viewModel.getCurrentOrder(orderId);
 
           return Scaffold(
@@ -26,7 +38,7 @@ class TrackOrderScreen extends StatelessWidget {
               title: const Text(
                 'Stato dell\'ordine',
                 style: TextStyle(
-                  fontSize: 30,
+                  fontSize: AppDimension.appBarText,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
@@ -54,7 +66,7 @@ class TrackOrderScreen extends StatelessWidget {
                           Text(
                             'N° $orderId',
                             style: const TextStyle(
-                              fontSize: 20,
+                              fontSize: AppDimension.mediumText,
                               decoration: TextDecoration.underline,
                             ),
                           ),
@@ -100,6 +112,7 @@ class TrackOrderScreen extends StatelessWidget {
                 ),
               )
           );
+
         }
       )
     );
@@ -129,7 +142,7 @@ class QRCodeInfo extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   const Divider(
-                    color: Colors.blue,
+                    color: AppColors.blueMedium,
                     thickness: 5,
                     height: 10,
                   ),
@@ -138,11 +151,11 @@ class QRCodeInfo extends StatelessWidget {
                     children: [
                       const Text(
                         'Il tuo driver:',
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(fontSize: AppDimension.defaultText),
                       ),
                       Text(
                         viewModel.driverName,
-                        style: const TextStyle(fontSize: 18),
+                        style: const TextStyle(fontSize: AppDimension.defaultText),
                       ),
                     ],
                   ),
@@ -154,11 +167,11 @@ class QRCodeInfo extends StatelessWidget {
                     children: [
                       const Text(
                         'Numero di prodotti:',
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(fontSize: AppDimension.defaultText),
                       ),
                       Text(
                         "${viewModel.order.cart.length}", // Replace with actual number of products
-                        style: const TextStyle(fontSize: 18),
+                        style: const TextStyle(fontSize: AppDimension.defaultText),
                       ),
                     ],
                   ),
@@ -168,11 +181,11 @@ class QRCodeInfo extends StatelessWidget {
                     children: [
                       const Text(
                         'Prezzo totale:',
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(fontSize: AppDimension.defaultText),
                       ),
                       Text(
                         '${viewModel.order.totalPrice}€', // Replace with actual total price
-                        style: const TextStyle(fontSize: 18),
+                        style: const TextStyle(fontSize: AppDimension.defaultText),
                       ),
                     ],
                   ),
@@ -203,11 +216,11 @@ class QRCodeInfo extends StatelessWidget {
       child: const Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.arrow_circle_up, color: Colors.blue),
+          Icon(Icons.arrow_circle_up, color: AppColors.blueMedium),
           SizedBox(width: 5),
           Text(
             'Swipe up per aprire QR Code',
-            style: TextStyle(color: Colors.blue),
+            style: TextStyle(color: AppColors.blueMedium),
           ),
         ],
       ),
@@ -239,7 +252,7 @@ class TrackingState extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: active ? Colors.blue : Colors.grey,
+                  color: active ? AppColors.blueMedium : Colors.grey,
                   width: 2,
                 ),
               ),
@@ -247,7 +260,7 @@ class TrackingState extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Icon(
                   icon,
-                  color: active ? Colors.blue : Colors.grey,
+                  color: active ? AppColors.blueMedium : Colors.grey,
                   size: 30,
                 ),
               ),
@@ -262,7 +275,7 @@ class TrackingState extends StatelessWidget {
               Text(
                 text,
                 style: const TextStyle(
-                  fontSize: 18,
+                  fontSize: AppDimension.defaultText,
                   fontWeight: FontWeight.bold,
                 ),
               ),

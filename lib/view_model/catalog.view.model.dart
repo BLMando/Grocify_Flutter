@@ -6,6 +6,7 @@ import '../models/user.model.dart';
 
 /// ViewModel class for managing the catalog page where all the food categories are shown
 class CatalogViewModel extends ChangeNotifier {
+
   final FirestoreService _firestoreService = FirestoreService();
   final AuthService _authService = AuthService();
 

@@ -9,7 +9,7 @@ class CategoryItemsViewModel extends ChangeNotifier {
   String _categoryName = '';
   String get categoryName => _categoryName;
 
-  final List<ProductModel> _products = [];
+  List<ProductModel> _products = [];
   List<ProductModel> get products => _products;
 
   /// Fetches and sets the name of the category identified by [categoryId].
@@ -41,33 +41,19 @@ class CategoryItemsViewModel extends ChangeNotifier {
           operator: '=='
       );
 
-      for (var document in querySnapshot.docs) {
+      _products = querySnapshot.docs.map((document) {
         Map<String, dynamic> data = document.data() as Map<String, dynamic>;
-        Map<String, dynamic> productMap;
-
-        if(data.containsKey('sconto')){
-          productMap = {
-            'id': document.id,
-            'nome': document.get("nome") as String,
-            'prezzo_al_kg': document.get("prezzo_al_kg"),
-            'prezzo_unitario': document.get("prezzo_unitario"),
-            'quantita': document.get("quantita"),
-            'immagine': document.get("immagine") as String,
-            'sconto': document.get("sconto") != null ? document.get("sconto") as String : '',
-          };
-        }else{
-          productMap = {
-            'id': document.id,
-            'nome': document.get("nome") as String,
-            'prezzo_al_kg': document.get("prezzo_al_kg"),
-            'prezzo_unitario': document.get("prezzo_unitario"),
-            'quantita': document.get("quantita"),
-            'immagine': document.get("immagine") as String,
-          };
-        }
-        ProductModel product = ProductModel.fromJson(productMap);
-        _products.add(product);
-      }
+        Map<String, dynamic> productMap = {
+          'id': document.id,
+          'nome': data['nome'] as String,
+          'prezzo_al_kg': data['prezzo_al_kg'],
+          'prezzo_unitario': data['prezzo_unitario'],
+          'quantita': data['quantita'],
+          'immagine': data['immagine'] as String,
+          if (data.containsKey('sconto')) 'sconto': data['sconto'] as String,
+        };
+        return ProductModel.fromJson(productMap);
+      }).toList();
 
       notifyListeners();
     } catch (e) {

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/user.model.dart';
+import '../../res/colors/app.colors.dart';
+import '../../res/dimensions/app.dimensions.dart';
 import '../../view_model/profile.view.model.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -26,21 +28,15 @@ class ProfileScreen extends StatelessWidget {
               title: const Text(
                 "Grocify account",
                 style: TextStyle(
-                  fontSize: 26,
+                  fontSize: AppDimension.appBarText,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
               ),
               centerTitle: true,
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () {
-                  // Handle back button press
-                  Navigator.pop(context);
-                },
-              ),
               shadowColor: Colors.black,
-              elevation: 10,
+              surfaceTintColor: Colors.white,
+              elevation: AppDimension.highElevation,
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(10),
@@ -94,7 +90,7 @@ class UserInfo extends StatelessWidget {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(
-              color: Colors.blue, // Replace with your gradient logic
+              color: AppColors.blueMedium, // Replace with your gradient logic
               width: 3,
             ),
           ),
@@ -141,7 +137,7 @@ class UserOptions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color cardColor = logOut ? Colors.lightBlue : Colors.white;
+    Color cardColor = logOut ? AppColors.blueLight : Colors.white;
     Color textColor = logOut ? Colors.white : Colors.black;
     IconData icon = logOut ? Icons.exit_to_app : Icons.arrow_forward_ios;
     Color iconColor = logOut ? Colors.white : Colors.black;
@@ -163,7 +159,7 @@ class UserOptions extends StatelessWidget {
               Text(
                 option,
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: AppDimension.mediumText,
                   fontWeight: FontWeight.w500,
                   color: textColor,
                 ),
