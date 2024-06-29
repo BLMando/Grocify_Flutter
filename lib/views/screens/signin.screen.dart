@@ -2,10 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:grocify/res/colors/app.colors.dart';
 import 'package:grocify/res/dimensions/app.dimensions.dart';
-import 'package:grocify/view/screens/home.screen.dart';
-import 'package:grocify/view/screens/signup.screen.dart';
+import 'package:grocify/views/screens/home.screen.dart';
+import 'package:grocify/views/screens/signup.screen.dart';
 import 'package:provider/provider.dart';
-import '../../view_model/auth.view.model.dart';
+import '../../viewmodels/auth.view.model.dart';
 
 class SignInScreen extends StatefulWidget {
   static const String id = "signin_screen";

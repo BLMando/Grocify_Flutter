@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grocify/res/colors/app.colors.dart';
-import 'package:grocify/view/screens/cart.screen.dart';
-import 'package:grocify/view/screens/profile.screen.dart';
+import 'package:grocify/views/screens/cart.screen.dart';
+import 'package:grocify/views/screens/profile.screen.dart';
 import 'catalog.screen.dart';
 
 /// Widget handling the bottom navigation bar
@@ -15,13 +15,19 @@ class HomeScreen extends StatefulWidget {
 }
 
 class HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
 
   static const List<Widget> _widgetOptions = <Widget>[
     CatalogScreen(),
     CartScreen(),
-    ProfileScreen()
+    ProfileScreen(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = 0;
+  }
 
   void _onItemTapped(int index) {
     setState(() {

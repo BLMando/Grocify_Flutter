@@ -3,7 +3,7 @@ import 'package:grocify/models/product.model.dart';
 import 'package:provider/provider.dart';
 import '../../res/colors/app.colors.dart';
 import '../../res/dimensions/app.dimensions.dart';
-import '../../view_model/category.items.view.model.dart';
+import '../../viewmodels/category.items.view.model.dart';
 
 class CategoryItemsScreen extends StatelessWidget {
   static const String id = "category_items_screen";

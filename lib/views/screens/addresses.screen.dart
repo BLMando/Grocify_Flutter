@@ -3,7 +3,7 @@ import 'package:grocify/models/user.details.model.dart';
 import 'package:grocify/res/colors/app.colors.dart';
 import 'package:provider/provider.dart';
 import '../../res/dimensions/app.dimensions.dart';
-import '../../view_model/addresses.view.model.dart';
+import '../../viewmodels/addresses.view.model.dart';
 
 class AddressesScreen extends StatelessWidget {
   static const String id = "addresses_screen";

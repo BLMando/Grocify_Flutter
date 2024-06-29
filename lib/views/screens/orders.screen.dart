@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:grocify/res/colors/app.colors.dart';
 import 'package:grocify/utils/utils.dart';
-import 'package:grocify/view/screens/track.order.screen.dart';
+import 'package:grocify/views/screens/track.order.screen.dart';
 import 'package:provider/provider.dart';
 import '../../models/order.model.dart';
 import '../../res/dimensions/app.dimensions.dart';
-import '../../view_model/orders.view.model.dart';
+import '../../viewmodels/orders.view.model.dart';
 
 class OrdersScreen extends StatelessWidget {
   static const String id = "orders_screen";

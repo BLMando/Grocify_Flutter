@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 /// A service class for interacting with Firestore.
 /// Provides methods to perform CRUD operations and queries on Firestore collections and documents.
 class FirestoreService {
+
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   /// Retrieves a document from the specified collection by its ID.
@@ -50,6 +51,18 @@ class FirestoreService {
   /// - `docId`: The ID of the document to delete.
   Future<void> deleteDocument(String collection, String docId) async {
     await _db.collection(collection).doc(docId).delete();
+  }
+
+  /// This function sets up a listener on a specific field of a document in a Firestore collection.
+  /// It returns a Stream that emits the field's value whenever it changes.
+  Stream<String> setUpFieldListener(String collection, String docId,String fieldId, String fieldToListen) {
+    return _db.collection(collection).where(fieldId, isEqualTo: docId).snapshots().map((snapshot) {
+      if (snapshot.docs.first.exists) {
+        return snapshot.docs.first.get(fieldToListen);
+      } else {
+        return '';
+      }
+    });
   }
 
   /// Queries a collection with the specified field, value, and operator.

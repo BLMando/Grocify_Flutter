@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:grocify/res/colors/app.colors.dart';
-import 'package:grocify/view/screens/catalog.screen.dart';
-import 'package:grocify/view/screens/home.screen.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import '../../res/dimensions/app.dimensions.dart';
-import '../../view_model/track.order.view.model.dart';
+import '../../viewmodels/track.order.view.model.dart';
+import 'home.screen.dart';
 
 class TrackOrderScreen extends StatelessWidget {
   static const String id = "track_screen";
@@ -19,19 +18,27 @@ class TrackOrderScreen extends StatelessWidget {
 
     final TrackOrderViewModel viewModel = TrackOrderViewModel();
 
-    if (viewModel.order.status == "concluso") {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushNamed(context, HomeScreen.id);
-      });
-    }
-
-
     return ChangeNotifierProvider<TrackOrderViewModel>.value(
         value: viewModel,
         child: Consumer<TrackOrderViewModel>(
         builder: (context, viewModel, child) {
 
           viewModel.getCurrentOrder(orderId);
+
+          /// Enable event listener for order status if status is empty and if not already redirected after status change
+          if (viewModel.orderStatus.isEmpty && !viewModel.isStatusChanged) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              viewModel.listenToOrderStatus(orderId);
+            });
+          }
+
+          /// Check if status changed to "concluso" and redirect
+          if (viewModel.isStatusChanged) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              viewModel.resetStatusFlag();
+              Navigator.pushNamed(context, HomeScreen.id);
+            });
+          }
 
           return Scaffold(
             appBar: AppBar(

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:grocify/view/screens/addresses.screen.dart';
-import 'package:grocify/view/screens/auth.stream.handler.dart';
-import 'package:grocify/view/screens/catalog.screen.dart';
-import 'package:grocify/view/screens/category.items.screen.dart';
-import 'package:grocify/view/screens/home.screen.dart';
-import 'package:grocify/view/screens/order.success.screen.dart';
-import 'package:grocify/view/screens/orders.screen.dart';
-import 'package:grocify/view/screens/signin.screen.dart';
+import 'package:grocify/views/screens/addresses.screen.dart';
+import 'package:grocify/views/screens/auth.stream.handler.dart';
+import 'package:grocify/views/screens/catalog.screen.dart';
+import 'package:grocify/views/screens/category.items.screen.dart';
+import 'package:grocify/views/screens/home.screen.dart';
+import 'package:grocify/views/screens/order.success.screen.dart';
+import 'package:grocify/views/screens/orders.screen.dart';
+import 'package:grocify/views/screens/signin.screen.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:grocify/view/screens/signup.screen.dart';
-import 'package:grocify/view/screens/track.order.screen.dart';
+import 'package:grocify/views/screens/signup.screen.dart';
+import 'package:grocify/views/screens/track.order.screen.dart';
 import 'firebase/firebase_options.dart';
 
 
