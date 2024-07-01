@@ -161,6 +161,7 @@ class CheckoutDialog extends StatelessWidget {
                 child: Icon(
                   Icons.info_outline_rounded,
                   color: AppColors.blueMedium,
+                  size: 70
                 )
               ),
 

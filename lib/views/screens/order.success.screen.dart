@@ -38,7 +38,7 @@ class OrderSuccessScreen extends StatelessWidget{
                       ),
                       const SizedBox(height: 40),
                       Image.asset(
-                        'assets/icon.png', // Make sure the image path is correct
+                        'assets/images/icon.png',
                         height: 160,
                         width: 160,
                       ),
