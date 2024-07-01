@@ -47,7 +47,7 @@ class GrocifyApp extends StatelessWidget {
         AddressesScreen.id: (context) => const AddressesScreen(),
         OrdersScreen.id: (context) => const OrdersScreen(),
         TrackOrderScreen.id: (context) => TrackOrderScreen(ModalRoute.of(context)?.settings.arguments as String),
-        OrderSuccessScreen.id: (context) => const OrderSuccessScreen()
+        OrderSuccessScreen.id: (context) => OrderSuccessScreen(ModalRoute.of(context)?.settings.arguments as String)
       },
     );
   }

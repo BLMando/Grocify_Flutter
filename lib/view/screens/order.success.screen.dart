@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grocify/res/dimensions/app.dimensions.dart';
-import 'package:grocify/view/screens/catalog.screen.dart';
+import 'package:grocify/view/screens/home.screen.dart';
 import 'package:grocify/view/screens/track.order.screen.dart';
 import 'package:provider/provider.dart';
 import '../../view_model/order.success.view.model.dart';
@@ -8,8 +8,9 @@ import '../../view_model/order.success.view.model.dart';
 class OrderSuccessScreen extends StatelessWidget{
 
   static const String id = "order_success_screen";
+  final String orderId;
 
-  const OrderSuccessScreen({super.key});
+  const OrderSuccessScreen(this.orderId, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +62,7 @@ class OrderSuccessScreen extends StatelessWidget{
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           ElevatedButton(
-                            onPressed: () => Navigator.pushNamed(context, CatalogScreen.id),
+                            onPressed: () => Navigator.pushNamed(context, HomeScreen.id),
                             style: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 20,
@@ -72,7 +73,7 @@ class OrderSuccessScreen extends StatelessWidget{
                           ),
 
                           OutlinedButton(
-                            onPressed: () => Navigator.pushNamed(context, TrackOrderScreen.id),
+                            onPressed: () => Navigator.pushNamed(context, TrackOrderScreen.id, arguments: orderId),
                             style: OutlinedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 20,

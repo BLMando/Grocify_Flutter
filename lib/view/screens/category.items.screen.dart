@@ -15,6 +15,8 @@ class CategoryItemsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final CategoryItemsViewModel viewModel = CategoryItemsViewModel();
 
+    viewModel.initializeProductsList();
+
     return ChangeNotifierProvider<CategoryItemsViewModel>.value(
         value: viewModel,
         child: Consumer<CategoryItemsViewModel>(
@@ -63,7 +65,7 @@ class CategoryItemsScreen extends StatelessWidget {
                             itemBuilder: (context, index) {
                               return CategoryItemCard(
                                 product: viewModel.products[index],
-                              );
+                              viewModel: viewModel,);
                             },
                           ),
                         )
@@ -93,8 +95,9 @@ class CategoryItemsScreen extends StatelessWidget {
 
 class CategoryItemCard extends StatefulWidget {
   final ProductModel product;
+  final CategoryItemsViewModel viewModel;
 
-  const CategoryItemCard({super.key, required this.product});
+  const CategoryItemCard({super.key, required this.product, required this.viewModel});
 
   @override
   CategoryItemState createState() => CategoryItemState();
@@ -118,7 +121,6 @@ class CategoryItemState extends State<CategoryItemCard>{
 
   @override
   Widget build(BuildContext context) {
-
     return Card(
       color: Colors.white,
         elevation: AppDimension.mediumElevation,
@@ -210,9 +212,10 @@ class CategoryItemState extends State<CategoryItemCard>{
                 flex: 5,
                 child: ElevatedButton(
                   onPressed: () {
-                    if (!isAddingToCart) {
+                    widget.viewModel.addToCart(widget.product);
+                    /*if (!isAddingToCart) {
                       updateState();
-                    }
+                    }*/
                   },
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white,
