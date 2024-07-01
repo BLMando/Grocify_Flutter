@@ -32,8 +32,8 @@ class FirestoreService {
   /// Parameters:
   /// - `collection`: The name of the collection to add the document to.
   /// - `data`: A map containing the data for the new document.
-  Future<void> addDocument(String collection, Map<String, dynamic> data) async {
-    await _db.collection(collection).add(data);
+  Future<DocumentReference> addDocument(String collection, Map<String, dynamic> data) async {
+    return await _db.collection(collection).add(data);
   }
 
   /// Updates an existing document in the specified collection with the provided data.

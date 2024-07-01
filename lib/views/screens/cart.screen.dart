@@ -3,16 +3,19 @@ import 'package:grocify/models/product.model.dart';
 import 'package:grocify/res/colors/app.colors.dart';
 import 'package:grocify/res/dimensions/app.dimensions.dart';
 import 'package:provider/provider.dart';
+import '../../data/local/product.dart';
 import '../../viewmodels/cart.view.model.dart';
 
 class CartScreen extends StatelessWidget{
-  static const String id = "catalog_screen";
+  static const String id = "cart_screen";
 
   const CartScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final CartViewModel viewModel = CartViewModel();
+
+    viewModel.initializeProductsList();
 
     return ChangeNotifierProvider<CartViewModel>.value(
         value: viewModel,
@@ -93,7 +96,9 @@ class CartScreen extends StatelessWidget{
                                 total: "${viewModel.totalPrice.toStringAsFixed(2)}€",
                                 buttonText: "Checkout",
                                 onCheckoutClick: () {
-                                  viewModel.checkForAddressSelected();
+                                  //viewModel.checkForAddressSelected();
+                                  viewModel.createNewOrder();
+                                  Navigator.pushNamed(context,"order_success_screen", arguments: viewModel.orderId);
                                 },
                               ),
                           ],
@@ -192,7 +197,7 @@ class CheckoutBox extends StatelessWidget {
 }
 
 class CartItem extends StatelessWidget {
-  final ProductModel product;
+  final Product product;
   final CartViewModel viewModel;
 
   const CartItem({
@@ -220,12 +225,12 @@ class CartItem extends StatelessWidget {
         child: Row(
           children: [
             Padding(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(8),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: Image.network(
                   product.image,
-                  width: 170,
+                  width: 60,
                   height: 80,
                   fit: BoxFit.cover,
                   loadingBuilder: (context, child, loadingProgress) {
@@ -255,9 +260,7 @@ class CartItem extends StatelessWidget {
                         fontSize: AppDimension.smallText,
                       ),
                     ),
-
                     const SizedBox(height: 10),
-
                     if (product.price != 0.0)
                       if (product.discount != 0.0)
                         RichText(
@@ -274,15 +277,13 @@ class CartItem extends StatelessWidget {
                               ),
 
                               TextSpan(
-                                text:
-                                "${(product.price * (100.0 - product.discount) / 100.0).toStringAsFixed(2)}€",
+                                text: "${(product.price * (100.0 - product.discount) / 100.0).toStringAsFixed(2)}€",
                                 style: const TextStyle(
                                   fontSize: AppDimension.smallText,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
                                 ),
                               ),
-
                               TextSpan(
                                 text: "/${product.quantity}",
                                 style: const TextStyle(
@@ -329,6 +330,22 @@ class CartItem extends StatelessWidget {
                 ),
               ),
             ),
+            Row(
+              children: [
+                ItemsQuantitySelector(
+                  product: product,
+                  viewModel: viewModel,
+                ),
+                IconButton(
+                  icon: const Icon(Icons.delete, color: Colors.red),
+                  padding: EdgeInsets.zero,
+                  constraints: BoxConstraints(),
+                  onPressed: () {
+                    viewModel.removeFromCart(product);
+                  },
+                ),
+              ],
+            ),
           ],
         ),
       ),
@@ -337,15 +354,13 @@ class CartItem extends StatelessWidget {
 }
 
 class ItemsQuantitySelector extends StatefulWidget {
-  final ProductModel product;
+  final Product product;
   final CartViewModel viewModel;
-  final String flagCart;
 
   const ItemsQuantitySelector({
     super.key,
     required this.product,
     required this.viewModel,
-    required this.flagCart,
   });
 
   @override
@@ -354,33 +369,25 @@ class ItemsQuantitySelector extends StatefulWidget {
 
 class ItemsQuantitySelectorState extends State<ItemsQuantitySelector> {
   late int state;
-  bool isUpdating = false;
 
   @override
   void initState() {
     super.initState();
-    //state = widget.product.units;
+    state = widget.product.units;
   }
 
   Future<void> updateUnits(int delta) async {
-    if (!isUpdating) {
+      await widget.viewModel.addValueToProductUnits(widget.product, delta);
+
       setState(() {
-        isUpdating = true;
+        state = widget.viewModel.getUnitsById(widget.product.id);
       });
-
-      //await widget.viewModel.addValueToProductUnits(widget.product, delta, widget.flagCart);
-      //int updatedUnits = widget.viewModel.getUnitsByIdAndThreshold(widget.product.id, widget.product.threshold);
-
-      /*setState(() {
-        state = updatedUnits;
-        isUpdating = false;
-      });*/
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return
+      Card(
       color: Colors.white,
       elevation: AppDimension.cardElevation,
       shape: RoundedRectangleBorder(
@@ -392,7 +399,7 @@ class ItemsQuantitySelectorState extends State<ItemsQuantitySelector> {
         children: [
           IconButton(
             onPressed: () {
-              if (state > 1 && !isUpdating) {
+              if (state > 1) {
                 updateUnits(-1);
               }
             },
@@ -401,20 +408,19 @@ class ItemsQuantitySelectorState extends State<ItemsQuantitySelector> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5),
             child: Text(
-              state.toString(),
+              '${widget.product.units}',
               style: const TextStyle(fontSize: AppDimension.smallText),
             ),
           ),
           IconButton(
             onPressed: () {
-              if (!isUpdating) {
                 updateUnits(1);
-              }
             },
             icon: const Icon(Icons.add, size: 18),
           ),
         ],
       ),
     );
+
   }
 }
