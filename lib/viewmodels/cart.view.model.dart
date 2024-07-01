@@ -52,6 +52,7 @@ class CartViewModel extends ChangeNotifier{
     notifyListeners();
   }
 
+
   Future<void> addValueToProductUnits(Product product, int value) async {
     if(value < 0){
       if (product.units > 1){
@@ -113,16 +114,14 @@ class CartViewModel extends ChangeNotifier{
 
     final productToRemove = _productsList.firstWhere((p) => p.id == product.id);
 
-    if (productToRemove != null) {
-      await productDao.deleteById(product.id, userId);
-      _productsList.remove(productToRemove);
+    await productDao.deleteById(product.id, userId);
+    _productsList.remove(productToRemove);
 
-      final priceReduction = product.units * (product.price * (100.0 - product.discount) / 100.0);
-      await cartDao.addValueToTotalPrice(userId, -priceReduction);
-      _totalPrice -= priceReduction;
-      notifyListeners();
+    final priceReduction = product.units * (product.price * (100.0 - product.discount) / 100.0);
+    await cartDao.addValueToTotalPrice(userId, -priceReduction);
+    _totalPrice -= priceReduction;
+    notifyListeners();
     }
-  }
 
   Future<void> getSelectedAddress() async {
     List<AddressModel> addresses;

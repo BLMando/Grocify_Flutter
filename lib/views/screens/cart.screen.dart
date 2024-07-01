@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:grocify/res/colors/app.colors.dart';
 import 'package:grocify/res/dimensions/app.dimensions.dart';
@@ -97,12 +98,24 @@ class CartScreen extends StatelessWidget{
                                 buttonText: "Checkout",
                                 onCheckoutClick: () async {
                                   await viewModel.createNewOrder();
-                                  print("flagOrder ${viewModel.flagOrder}");
-                                  print("flagSelectedAddress ${viewModel.flagSelectedAddress}");
-                                  print("OrderId ${viewModel.orderId}");
-                                  if((viewModel.flagOrder == false) && (viewModel.flagSelectedAddress == true)){
-                                    print("OrderId ${viewModel.orderId}");
-                                    Navigator.pushNamed(context,OrderSuccessScreen.id, arguments: viewModel.orderId);
+                                  if (context.mounted) {
+                                    if (!viewModel.flagSelectedAddress) {
+                                      showDialog<String>(
+                                        context: context,
+                                        builder: (BuildContext context) => const CheckoutDialog(
+                                          description: "Impossibile procedere: non hai alcun indirizzo di spedizione selezionato!",
+                                        ),
+                                      );
+                                    } else if (viewModel.flagOrder) {
+                                      showDialog<String>(
+                                        context: context,
+                                        builder: (BuildContext context) => const CheckoutDialog(
+                                          description: "Impossibile procedere: hai attualmente un ordine in corso!",
+                                        ),
+                                      );
+                                    } else {
+                                      Navigator.pushNamed(context, OrderSuccessScreen.id, arguments: viewModel.orderId);
+                                    }
                                   }
                                 },
                               ),
@@ -121,50 +134,46 @@ class CartScreen extends StatelessWidget{
 
 class CheckoutDialog extends StatelessWidget {
 
-  CheckoutDialog({super.key});
+  final String description;
+
+  const CheckoutDialog({super.key, required this.description});
 
   @override
   Widget build(BuildContext context) {
 
     return AlertDialog(
       title: const Text(
-          text : "Ordine in corso",
+          "Informazioni",
           style : TextStyle(
-            fontWeight : FontWeight.Bold,
+            fontWeight : FontWeight.bold,
             fontSize : 20,
           ),
-        textAlign : TextAlign.Center,
-        )
+          textAlign : TextAlign.center,
       ),
-      content: SingleChildScrollView(
+      content:  SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            title = {
 
-            },
-            icon = {
-              Icon(
-                imageVector = Icons.Outlined.Info,
-                contentDescription = "icona di informazione",
-                tint = BlueMedium,
-                modifier = Modifier
-                    .padding(top = 35.dp)
-                    .height(70.dp)
-                    .fillMaxWidth(),
+              const Padding(
+                padding: EdgeInsets.only(top: 35),
+                child: Icon(
+                  Icons.info_outline_rounded,
+                  color: AppColors.blueMedium,
+                )
+              ),
+
+              Padding(
+                  padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
+                  child: Text(
+                    description,
+                    textAlign : TextAlign.center,
+                    style: const TextStyle(
+                      fontSize : 15,
+                    ),
+                )
               )
-            },
-            text = {
-              Text(
-                  text = "Non è possibile procedere con un altro ordine finché quello attualmente in corso non è concluso",
-                  textAlign = TextAlign.Center,
-                  modifier = Modifier
-                      .padding(top = 10.dp, start = 25.dp, end = 25.dp)
-                      .fillMaxWidth(),
-                  style = MaterialTheme.typography.bodyMedium
-              )
-            },
           ],
         ),
       ),
@@ -172,28 +181,7 @@ class CheckoutDialog extends StatelessWidget {
         ElevatedButton(
           onPressed: () => Navigator.pop(context, 'Cancel'),
           child: const Text(
-            "Indietro",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 17,
-            ),
-          ),
-        ),
-        ElevatedButton(
-          onPressed: () async {
-            await vieModel.addAddress(
-              addressNameController.text,
-              addressController.text,
-              cityController.text,
-              civicController.text,
-            );
-            // Check if the context is still valid before using it
-            if(context.mounted) {
-              Navigator.pop(context, 'Cancel');
-            }
-          },
-          child: const Text(
-            "Aggiungi",
+            "Ho capito",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 17,
@@ -201,36 +189,6 @@ class CheckoutDialog extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String labelText,
-    required TextInputType keyboardType,
-  }) {
-    return TextField(
-      controller: controller,
-      keyboardType: keyboardType,
-      decoration: InputDecoration(
-        labelText: labelText,
-        focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: AppColors.blueMedium),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.black.withOpacity(0.5)),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.red),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.red),
-          borderRadius: BorderRadius.circular(8),
-        ),
-      ),
     );
   }
 }
@@ -460,7 +418,7 @@ class CartItem extends StatelessWidget {
                 IconButton(
                   icon: const Icon(Icons.delete, color: Colors.red),
                   padding: EdgeInsets.zero,
-                  constraints: BoxConstraints(),
+                  constraints: const BoxConstraints(),
                   onPressed: () {
                     viewModel.removeFromCart(product);
                   },
