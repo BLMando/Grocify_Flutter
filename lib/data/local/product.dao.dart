@@ -17,7 +17,7 @@ abstract class ProductDao {
 
   @Query('DELETE FROM Product WHERE id = :productId AND userId = :userId')
   Future<void> deleteById(String productId, String userId);
-
+//
   @Query('DELETE FROM Product WHERE userId = :userId')
   Future<void> deleteProductsList(String userId);
 }

@@ -265,7 +265,7 @@ class _$ProductDao extends ProductDao {
 
   @override
   Future<void> deleteProductsList(String userId) async {
-    await _queryAdapter.queryNoReturn('DELETE FROM Products WHERE userId = ?1',
+    await _queryAdapter.queryNoReturn('DELETE FROM Product WHERE userId = ?1',
         arguments: [userId]);
   }
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:grocify/models/product.model.dart';
 import 'package:grocify/res/colors/app.colors.dart';
 import 'package:grocify/res/dimensions/app.dimensions.dart';
+import 'package:grocify/views/screens/order.success.screen.dart';
 import 'package:provider/provider.dart';
 import '../../data/local/product.dart';
 import '../../viewmodels/cart.view.model.dart';
@@ -95,10 +95,15 @@ class CartScreen extends StatelessWidget{
                                 shipping: "1.50€",
                                 total: "${viewModel.totalPrice.toStringAsFixed(2)}€",
                                 buttonText: "Checkout",
-                                onCheckoutClick: () {
-                                  //viewModel.checkForAddressSelected();
-                                  viewModel.createNewOrder();
-                                  Navigator.pushNamed(context,"order_success_screen", arguments: viewModel.orderId);
+                                onCheckoutClick: () async {
+                                  await viewModel.createNewOrder();
+                                  print("flagOrder ${viewModel.flagOrder}");
+                                  print("flagSelectedAddress ${viewModel.flagSelectedAddress}");
+                                  print("OrderId ${viewModel.orderId}");
+                                  if((viewModel.flagOrder == false) && (viewModel.flagSelectedAddress == true)){
+                                    print("OrderId ${viewModel.orderId}");
+                                    Navigator.pushNamed(context,OrderSuccessScreen.id, arguments: viewModel.orderId);
+                                  }
                                 },
                               ),
                           ],
@@ -110,6 +115,122 @@ class CartScreen extends StatelessWidget{
             );
           }
         )
+    );
+  }
+}
+
+class CheckoutDialog extends StatelessWidget {
+
+  CheckoutDialog({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+
+    return AlertDialog(
+      title: const Text(
+          text : "Ordine in corso",
+          style : TextStyle(
+            fontWeight : FontWeight.Bold,
+            fontSize : 20,
+          ),
+        textAlign : TextAlign.Center,
+        )
+      ),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            title = {
+
+            },
+            icon = {
+              Icon(
+                imageVector = Icons.Outlined.Info,
+                contentDescription = "icona di informazione",
+                tint = BlueMedium,
+                modifier = Modifier
+                    .padding(top = 35.dp)
+                    .height(70.dp)
+                    .fillMaxWidth(),
+              )
+            },
+            text = {
+              Text(
+                  text = "Non è possibile procedere con un altro ordine finché quello attualmente in corso non è concluso",
+                  textAlign = TextAlign.Center,
+                  modifier = Modifier
+                      .padding(top = 10.dp, start = 25.dp, end = 25.dp)
+                      .fillMaxWidth(),
+                  style = MaterialTheme.typography.bodyMedium
+              )
+            },
+          ],
+        ),
+      ),
+      actions: [
+        ElevatedButton(
+          onPressed: () => Navigator.pop(context, 'Cancel'),
+          child: const Text(
+            "Indietro",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 17,
+            ),
+          ),
+        ),
+        ElevatedButton(
+          onPressed: () async {
+            await vieModel.addAddress(
+              addressNameController.text,
+              addressController.text,
+              cityController.text,
+              civicController.text,
+            );
+            // Check if the context is still valid before using it
+            if(context.mounted) {
+              Navigator.pop(context, 'Cancel');
+            }
+          },
+          child: const Text(
+            "Aggiungi",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 17,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String labelText,
+    required TextInputType keyboardType,
+  }) {
+    return TextField(
+      controller: controller,
+      keyboardType: keyboardType,
+      decoration: InputDecoration(
+        labelText: labelText,
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: AppColors.blueMedium),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.black.withOpacity(0.5)),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.red),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.red),
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
     );
   }
 }

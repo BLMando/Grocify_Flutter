@@ -56,7 +56,7 @@ class AddressesScreen extends StatelessWidget {
               onPressed: () {
                 showDialog<String>(
                   context: context,
-                  builder: (BuildContext context) => AddressDialog(vieModel: viewModel)
+                  builder: (BuildContext context) => AddressDialog(viewModel: viewModel)
                 );
               },
               backgroundColor: AppColors.blueDark,
@@ -209,9 +209,9 @@ class AddressCard extends StatelessWidget {
 
 class AddressDialog extends StatelessWidget {
 
-  final AddressesViewModel vieModel;
+  final AddressesViewModel viewModel;
 
-  AddressDialog({super.key, required this.vieModel});
+  AddressDialog({super.key, required this.viewModel});
 
   late TextEditingController addressNameController;
   late TextEditingController cityController;
@@ -285,7 +285,7 @@ class AddressDialog extends StatelessWidget {
         ),
         ElevatedButton(
           onPressed: () async {
-            await vieModel.addAddress(
+            await viewModel.addAddress(
               addressNameController.text,
               addressController.text,
               cityController.text,
