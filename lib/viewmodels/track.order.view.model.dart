@@ -30,6 +30,11 @@ class TrackOrderViewModel extends ChangeNotifier {
   /// Getter to retrieve the name of the driver associated with the current order.
   String get driverName => _driverName;
 
+  String _orderStatus = '';
+  StreamSubscription<String>? _orderStatusSubscription;
+  bool isStatusChanged = false; // Flag to track if status changed to "concluso"
+  String get orderStatus => _orderStatus;
+
   /// Fetches and sets the name of the driver associated with the given order ID.
   /// Retrieves driver information from Firestore based on the driver's UID,
   /// updates [_driverName] with the concatenated driver's name and surname,
@@ -83,4 +88,36 @@ class TrackOrderViewModel extends ChangeNotifier {
     }
   }
 
+
+  /// This function listens to changes in the 'status' field of a specific document in the 'orders' collection.
+  /// It sets up a listener that updates the _orderStatus property and notifies listeners of the ViewModel.
+  /// Then the listener is being eliminated
+  void listenToOrderStatus(String orderId) {
+    _orderStatusSubscription?.cancel();
+
+    _orderStatusSubscription = _firestoreService.setUpFieldListener("orders", orderId, "orderId", "status").listen((status) {
+      if (status == "concluso") {
+        _orderStatus = status;
+        isStatusChanged = true; // Set flag to true when status changes to "concluso"
+        notifyListeners();
+        cancelOrderStatusListener();
+      }
+    });
+  }
+
+  void cancelOrderStatusListener() {
+    _orderStatusSubscription?.cancel();
+    _orderStatusSubscription = null;
+  }
+
+  /// Cancels listener even if the ViewModel is destroyed
+  @override
+  void dispose() {
+    cancelOrderStatusListener();
+    super.dispose();
+  }
+
+  void resetStatusFlag(){
+    isStatusChanged = false; // Reset flag
+  }
 }

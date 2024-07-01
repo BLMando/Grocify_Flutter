@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grocify/models/category.model.dart';
 import 'package:grocify/res/dimensions/app.dimensions.dart';
-import 'package:grocify/view_model/catalog.view.model.dart';
+import 'package:grocify/viewmodels/catalog.view.model.dart';
 import 'package:provider/provider.dart';
 import 'category.items.screen.dart';
 

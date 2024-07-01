@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:grocify/res/dimensions/app.dimensions.dart';
-import 'package:grocify/view/screens/home.screen.dart';
-import 'package:grocify/view/screens/track.order.screen.dart';
+import 'package:grocify/views/screens/home.screen.dart';
+import 'package:grocify/views/screens/track.order.screen.dart';
 import 'package:provider/provider.dart';
-import '../../view_model/order.success.view.model.dart';
+import '../../viewmodels/order.success.view.model.dart';
 
 class OrderSuccessScreen extends StatelessWidget{
 

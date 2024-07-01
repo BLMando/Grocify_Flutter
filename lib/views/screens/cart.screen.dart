@@ -4,7 +4,7 @@ import 'package:grocify/res/colors/app.colors.dart';
 import 'package:grocify/res/dimensions/app.dimensions.dart';
 import 'package:provider/provider.dart';
 import '../../data/local/product.dart';
-import '../../view_model/cart.view.model.dart';
+import '../../viewmodels/cart.view.model.dart';
 
 class CartScreen extends StatelessWidget{
   static const String id = "cart_screen";
@@ -275,6 +275,7 @@ class CartItem extends StatelessWidget {
                                   decoration: TextDecoration.lineThrough,
                                 ),
                               ),
+
                               TextSpan(
                                 text: "${(product.price * (100.0 - product.discount) / 100.0).toStringAsFixed(2)}€",
                                 style: const TextStyle(

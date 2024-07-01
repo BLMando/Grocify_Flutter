@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../models/user.model.dart';
 import '../../res/colors/app.colors.dart';
 import '../../res/dimensions/app.dimensions.dart';
-import '../../view_model/profile.view.model.dart';
+import '../../viewmodels/profile.view.model.dart';
 
 class ProfileScreen extends StatelessWidget {
   static const String id = "profile_screen";

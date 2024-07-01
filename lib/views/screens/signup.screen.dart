@@ -2,9 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:grocify/res/colors/app.colors.dart';
 import 'package:grocify/res/dimensions/app.dimensions.dart';
-import 'package:grocify/view/screens/home.screen.dart';
-import 'package:grocify/view/screens/signin.screen.dart';
-import 'package:grocify/view_model/auth.view.model.dart';
+import 'package:grocify/views/screens/home.screen.dart';
+import 'package:grocify/views/screens/signin.screen.dart';
+import 'package:grocify/viewmodels/auth.view.model.dart';
 import 'package:provider/provider.dart';
 
 
