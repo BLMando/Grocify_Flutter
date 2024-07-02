@@ -273,37 +273,59 @@ class AddressDialog extends StatelessWidget {
         ),
       ),
       actions: [
-        ElevatedButton(
-          onPressed: () => Navigator.pop(context, 'Cancel'),
-          child: const Text(
-            "Indietro",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 17,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            ElevatedButton(
+                onPressed: () => Navigator.pop(context, 'Cancel'),
+                style: const ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll(AppColors.blueDark),
+                  padding: WidgetStatePropertyAll(EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 10,
+                  )),
+                ),
+                child: const Text(
+                  "Indietro",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: AppDimension.smallText
+                  ),
+                )
             ),
-          ),
-        ),
-        ElevatedButton(
-          onPressed: () async {
-            await viewModel.addAddress(
-              addressNameController.text,
-              addressController.text,
-              cityController.text,
-              civicController.text,
-            );
-            // Check if the context is still valid before using it
-            if(context.mounted) {
-              Navigator.pop(context, 'Cancel');
-            }
-          },
-          child: const Text(
-            "Aggiungi",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 17,
+            ElevatedButton(
+                onPressed: () async {
+                  await viewModel.addAddress(
+                    addressNameController.text,
+                    addressController.text,
+                    cityController.text,
+                    civicController.text,
+                  );
+                  // Check if the context is still valid before using it
+                  if(context.mounted) {
+                    Navigator.pop(context, 'Cancel');
+                  }
+                },
+                style: const ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll(AppColors.blueDark),
+                  padding: WidgetStatePropertyAll(EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 10,
+                  )),
+                ),
+                child: const Text(
+                  "Aggiungi",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: AppDimension.smallText
+                  ),
+                )
             ),
-          ),
-        ),
+          ],
+        )
+
       ],
     );
   }

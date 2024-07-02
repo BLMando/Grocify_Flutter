@@ -10,12 +10,11 @@ class AuthViewModel extends ChangeNotifier {
   final AuthService _authService = AuthService();
   final FirestoreService _firestoreService = FirestoreService();
 
-
   final String procedureType;
 
   String _statusMessage = '';
-  bool _isLoading = false;
   bool _areFieldsFilled = false;
+  bool _hasPermissions = false;
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController surnameController = TextEditingController();
@@ -39,17 +38,17 @@ class AuthViewModel extends ChangeNotifier {
     }
   }
 
-  /// Getter for authentication state changes.
-  Stream<User?> get authStateChanges => _authService.authStateChanges;
+  /// Getter for the current user info.
+  User? get currentUser => _authService.currentUser;
 
   /// Getter for the current status message.
   String get statusMessage => _statusMessage;
 
-  /// Getter for checking if data is currently loading.
-  bool get isLoading => _isLoading;
-
   /// Getter for checking if all required fields are filled.
   bool get areFieldsFilled => _areFieldsFilled;
+
+  /// Getter for checking if the user has the required permissions.
+  bool get hasPermissions => _hasPermissions;
 
   /// Listener function to check if sign-in text fields are not empty.
   void _checkFieldsSignIn() {
@@ -68,25 +67,27 @@ class AuthViewModel extends ChangeNotifier {
   }
 
   /// Initiates the sign-in process.
-  /// Sets loading state, attempts sign-in, handles exceptions,
+  /// Sets loading state, attempts sign-in, checks permissions, handles exceptions,
   /// and updates status message and loading state accordingly.
   Future<void> signIn() async {
-    _isLoading = true;
-    notifyListeners();
-
     try {
-      User? user = await _authService.signInWithEmailAndPassword(
+      await _authService.signInWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
       );
 
-      if (user == null) {
-        _statusMessage = 'Sign in failed';
+      if (_authService.currentUser != null) {
+        _hasPermissions = await checkForAuthPermissions(_authService.currentUser!.uid);
+        if (!_hasPermissions) {
+          _statusMessage = "App riservata ai clienti!";
+        }else{
+          _statusMessage = '';
+        }
       }
+
     } on FirebaseAuthException catch (e) {
       _statusMessage = e.message.toString();
     } finally {
-      _isLoading = false;
       notifyListeners();
     }
   }
@@ -96,9 +97,6 @@ class AuthViewModel extends ChangeNotifier {
   /// updates status message, adds user to Firestore on successful sign-up,
   /// and updates loading state accordingly.
   Future<void> signUp() async {
-    _isLoading = true;
-    notifyListeners();
-
     try {
       User? user = await _authService.createUserWithEmailAndPassword(
         email: emailController.text,
@@ -124,7 +122,6 @@ class AuthViewModel extends ChangeNotifier {
     } on FirebaseAuthException catch (e) {
       _statusMessage = e.message.toString();
     } finally {
-      _isLoading = false;
       notifyListeners();
     }
   }
@@ -133,4 +130,33 @@ class AuthViewModel extends ChangeNotifier {
   Future<void> signOut() async {
     await _authService.signOut();
   }
+
+  /// Checks if the user has the required permissions based on their role.
+  /// This function queries the Firestore collection to check the role of the user
+  /// with the given `userId`. If the user's role is "user", it returns `true`.
+  /// Otherwise, it returns `false`.
+  ///
+  /// Parameters:
+  /// - `userId`: The unique identifier of the user.
+  Future<bool> checkForAuthPermissions(String userId) async {
+    try {
+      final querySnapshot = await _firestoreService.queryCollection(
+          collectionPath: "users",
+          field: "uid",
+          value: userId,
+          operator: "=="
+      );
+
+      if (querySnapshot.docs.isNotEmpty) {
+        final userRole = querySnapshot.docs.first.get("role");
+        return userRole == "user";
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print("Error in checkForAuthPermissions: $e");
+      return false;
+    }
+  }
+
 }

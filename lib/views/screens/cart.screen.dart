@@ -4,7 +4,7 @@ import 'package:grocify/res/colors/app.colors.dart';
 import 'package:grocify/res/dimensions/app.dimensions.dart';
 import 'package:grocify/views/screens/order.success.screen.dart';
 import 'package:provider/provider.dart';
-import '../../data/local/product.dart';
+import '../../data/local/entity/product.dart';
 import '../../viewmodels/cart.view.model.dart';
 
 class CartScreen extends StatelessWidget{
@@ -24,6 +24,7 @@ class CartScreen extends StatelessWidget{
           builder: (context, viewModel, child) {
             return Scaffold(
               appBar: AppBar(
+                automaticallyImplyLeading: false, // Set to false to remove the back icon
                 title: const Text(
                   "Il tuo carrello",
                   style: TextStyle(
@@ -132,68 +133,6 @@ class CartScreen extends StatelessWidget{
   }
 }
 
-class CheckoutDialog extends StatelessWidget {
-
-  final String description;
-
-  const CheckoutDialog({super.key, required this.description});
-
-  @override
-  Widget build(BuildContext context) {
-
-    return AlertDialog(
-      title: const Text(
-          "Informazioni",
-          style : TextStyle(
-            fontWeight : FontWeight.bold,
-            fontSize : 20,
-          ),
-          textAlign : TextAlign.center,
-      ),
-      content:  SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-
-              const Padding(
-                padding: EdgeInsets.only(top: 35),
-                child: Icon(
-                  Icons.info_outline_rounded,
-                  color: AppColors.blueMedium,
-                  size: 70
-                )
-              ),
-
-              Padding(
-                  padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
-                  child: Text(
-                    description,
-                    textAlign : TextAlign.center,
-                    style: const TextStyle(
-                      fontSize : 15,
-                    ),
-                )
-              )
-          ],
-        ),
-      ),
-      actions: [
-        ElevatedButton(
-          onPressed: () => Navigator.pop(context, 'Cancel'),
-          child: const Text(
-            "Ho capito",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 17,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
 class CheckoutBox extends StatelessWidget {
   final String title;
   final String subtotal;
@@ -220,24 +159,33 @@ class CheckoutBox extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
-      margin: const EdgeInsets.all(10),
+      margin: const EdgeInsets.all(5),
       child: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(title),
-              ],
+
+            Text(
+                title,
+                textAlign: TextAlign.start,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold
+                ),
             ),
+
+            const SizedBox(height: 5),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text("Totale parziale"),
                 Text(subtotal),
               ],
+
             ),
+            const SizedBox(height: 5),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -245,6 +193,7 @@ class CheckoutBox extends StatelessWidget {
                 Text(shipping),
               ],
             ),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -264,11 +213,28 @@ class CheckoutBox extends StatelessWidget {
                 ),
               ],
             ),
+
             const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: onCheckoutClick,
-              child: Text(buttonText),
-            ),
+
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                  onPressed: onCheckoutClick,
+                  style: const ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(AppColors.blueDark)
+                  ),
+                  child: Padding(
+                      padding: const EdgeInsets.all(3),
+                      child: Text(
+                        buttonText,
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: AppDimension.smallText
+                        ),
+                      )
+                  )
+              )
+            )
           ],
         ),
       ),
@@ -294,123 +260,125 @@ class CartItem extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
-      margin: const EdgeInsets.all(10),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            width: 3,
-          ),
-          borderRadius: BorderRadius.circular(20),
-        ),
+      margin: const EdgeInsets.all(5),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 8,bottom: 8,left: 8),
         child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.network(
-                  product.image,
-                  width: 60,
-                  height: 80,
-                  fit: BoxFit.cover,
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return const Center(
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(AppColors.blueMedium),
-                      ),
-                    );
-                  },
-                  errorBuilder: (context, error, stackTrace) {
-                    return const Icon(Icons.error, color: Colors.red);
-                  },
-                ),
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      product.name,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: AppDimension.smallText,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    if (product.price != 0.0)
-                      if (product.discount != 0.0)
-                        RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: "${product.price.toStringAsFixed(2)}€",
-                                style: const TextStyle(
-                                  fontSize: AppDimension.verySmallText,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.red,
-                                  decoration: TextDecoration.lineThrough,
-                                ),
-                              ),
 
-                              TextSpan(
-                                text: "${(product.price * (100.0 - product.discount) / 100.0).toStringAsFixed(2)}€",
-                                style: const TextStyle(
-                                  fontSize: AppDimension.smallText,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              TextSpan(
-                                text: "/${product.quantity}",
-                                style: const TextStyle(
-                                  fontSize: AppDimension.verySmallText,
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      else
-                        RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: "${product.price}€",
-                                style: const TextStyle(
-                                  fontSize: AppDimension.smallText,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              TextSpan(
-                                text: "/${product.quantity}",
-                                style: const TextStyle(
-                                  fontSize: AppDimension.verySmallText,
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                    else
-                      Text(
-                        "Units x ${product.quantity}",
-                        style: const TextStyle(
-                          fontSize: AppDimension.smallText,
-                          fontWeight: FontWeight.w300,
-                        ),
-                      ),
-                  ],
-                ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image.network(
+                product.image,
+                width: 80,
+                height: 80,
+                fit: BoxFit.cover,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(AppColors.blueMedium),
+                    ),
+                  );
+                },
+                errorBuilder: (context, error, stackTrace) {
+                  return const Icon(Icons.error, color: Colors.red);
+                },
               ),
             ),
+
+            const SizedBox(width: 8),
+
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    product.name,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: AppDimension.smallText,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 5),
+                  if (product.price != 0.0)
+                    if (product.discount != 0.0)
+                      RichText(
+                        overflow: TextOverflow.ellipsis,
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: "${product.price.toStringAsFixed(2)}€",
+                              style: const TextStyle(
+                                fontSize: AppDimension.verySmallText,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red,
+                                decoration: TextDecoration.lineThrough,
+                              ),
+                            ),
+                            TextSpan(
+                              text: " ${ (product.price * (100.0 - product.discount) / 100.0).toStringAsFixed(2)}€",
+                              style: const TextStyle(
+                                fontSize: AppDimension.smallText,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            TextSpan(
+                              text: " /${product.quantity}",
+                              style: const TextStyle(
+                                fontSize: AppDimension.verySmallText,
+                                color: Colors.grey,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    else
+                      RichText(
+                        overflow: TextOverflow.ellipsis,
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: "${product.price}€",
+                              style: const TextStyle(
+                                fontSize: AppDimension.smallText,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            TextSpan(
+                              text: " /${product.quantity}",
+                              style: const TextStyle(
+                                fontSize: AppDimension.verySmallText,
+                                color: Colors.grey,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                  else
+                    Text(
+                      "Units x ${product.quantity}",
+                      style: const TextStyle(
+                        fontSize: AppDimension.smallText,
+                        fontWeight: FontWeight.w300,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                ],
+              ),
+            ),
+
             Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 ItemsQuantitySelector(
                   product: product,
@@ -419,7 +387,6 @@ class CartItem extends StatelessWidget {
                 IconButton(
                   icon: const Icon(Icons.delete, color: Colors.red),
                   padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
                   onPressed: () {
                     viewModel.removeFromCart(product);
                   },
@@ -466,41 +433,113 @@ class ItemsQuantitySelectorState extends State<ItemsQuantitySelector> {
 
   @override
   Widget build(BuildContext context) {
-    return
-      Card(
-      color: Colors.white,
-      elevation: AppDimension.cardElevation,
-      shape: RoundedRectangleBorder(
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
         borderRadius: BorderRadius.circular(20),
       ),
-      margin: const EdgeInsets.all(10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
+
           IconButton(
             onPressed: () {
               if (state > 1) {
                 updateUnits(-1);
               }
             },
-            icon: const Icon(Icons.remove, size: 18),
+            icon: const Icon(Icons.remove, size: 16),
+            padding: EdgeInsets.zero, // Removes padding around the icon
+            constraints: const BoxConstraints(minWidth: 14, minHeight: 14), // Minimal constraints
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: Text(
+
+         Text(
               '${widget.product.units}',
               style: const TextStyle(fontSize: AppDimension.smallText),
-            ),
-          ),
+         ),
+
           IconButton(
             onPressed: () {
-                updateUnits(1);
+              updateUnits(1);
             },
-            icon: const Icon(Icons.add, size: 18),
+            icon: const Icon(Icons.add, size: 16),
+            padding: EdgeInsets.zero, // Removes padding around the icon
+            constraints: const BoxConstraints(minWidth: 14, minHeight: 14), // Minimal constraints
           ),
         ],
       ),
     );
+  }
+}
 
+class CheckoutDialog extends StatelessWidget {
+
+  final String description;
+
+  const CheckoutDialog({super.key, required this.description});
+
+  @override
+  Widget build(BuildContext context) {
+
+    return AlertDialog(
+      title: const Text(
+        "Informazioni",
+        style : TextStyle(
+          fontWeight : FontWeight.bold,
+          fontSize : AppDimension.mediumText,
+        ),
+        textAlign : TextAlign.center,
+      ),
+      content:  SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+
+            const Padding(
+                padding: EdgeInsets.only(bottom: 20),
+                child: Icon(
+                    Icons.info_outline_rounded,
+                    color: AppColors.blueMedium,
+                    size: 70
+                )
+            ),
+
+            Padding(
+                padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
+                child: Text(
+                  description,
+                  textAlign : TextAlign.center,
+                  style: const TextStyle(
+                    fontSize : AppDimension.smallText,
+                  ),
+                )
+            )
+          ],
+        ),
+      ),
+      actions: [
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+              onPressed: () => Navigator.pop(context, 'Cancel'),
+              style: const ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll(AppColors.blueDark)
+              ),
+              child: const Padding(
+                  padding: EdgeInsets.all(3),
+                  child: Text(
+                    "Ho capito",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: AppDimension.smallText
+                    ),
+                  )
+              )
+          )
+        )
+      ],
+    );
   }
 }

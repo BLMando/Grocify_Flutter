@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:grocify/models/user.model.dart';
 import '../firebase/auth.service.dart';
@@ -18,6 +19,9 @@ class ProfileViewModel extends ChangeNotifier {
 
    /// Getter to retrieve the current signed-in user's information.
    UserModel get user => _user;
+
+   /// Getter for authentication state changes.
+   Stream<User?> get authStateChanges => _authService.authStateChanges;
 
    /// Fetches and sets the signed-in user's profile information.
    /// Retrieves user data from Firestore based on current user's UID,

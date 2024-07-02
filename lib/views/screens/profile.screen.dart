@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grocify/views/screens/signin.screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/user.model.dart';
@@ -21,10 +22,19 @@ class ProfileScreen extends StatelessWidget {
         child: Consumer<ProfileViewModel>(
         builder: (context, viewModel, child) {
 
+          viewModel.authStateChanges.listen((user){
+            if(user==null){
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushNamed(context, SignInScreen.id);
+              });
+            }
+          });
+
           viewModel.getSignedInUser();
 
           return Scaffold(
             appBar: AppBar(
+              automaticallyImplyLeading: false, // Set to false to remove the back icon
               title: const Text(
                 "Grocify account",
                 style: TextStyle(

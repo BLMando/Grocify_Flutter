@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:grocify/models/order.model.dart';
 
-import '../data/local/cart.dart';
-import '../data/local/product.dart';
+import '../data/local/entity/cart.dart';
+import '../data/local/entity/product.dart';
 import '../data/local/storage.dart';
 import '../firebase/auth.service.dart';
 import '../firebase/firestore.service.dart';

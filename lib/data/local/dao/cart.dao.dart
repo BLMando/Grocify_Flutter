@@ -1,5 +1,5 @@
 import 'package:floor/floor.dart';
-import 'cart.dart';
+import '../entity/cart.dart';
 
 @dao
 abstract class CartDao {

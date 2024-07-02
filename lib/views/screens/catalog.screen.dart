@@ -23,6 +23,7 @@ class CatalogScreen extends StatelessWidget{
 
           return Scaffold(
             appBar: AppBar(
+              automaticallyImplyLeading: false, // Set to false to remove the back icon
               shadowColor: Colors.black,
               elevation: AppDimension.mediumElevation,
               shape: const RoundedRectangleBorder(

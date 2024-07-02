@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:grocify/views/screens/addresses.screen.dart';
-import 'package:grocify/views/screens/auth.stream.handler.dart';
 import 'package:grocify/views/screens/catalog.screen.dart';
 import 'package:grocify/views/screens/category.items.screen.dart';
 import 'package:grocify/views/screens/home.screen.dart';
@@ -35,7 +34,7 @@ class GrocifyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Grocify',
       theme: ThemeData(useMaterial3: true),
-      home: const AuthStreamHandler(), // Set AuthStreamHandler as the initial route
+      home: const SignInScreen(),
       debugShowCheckedModeBanner: false,
       routes: {
         // Define named routes for navigation
