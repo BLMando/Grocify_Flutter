@@ -88,7 +88,6 @@ class CategoryItemsViewModel extends ChangeNotifier {
         id: product.id,
         userId: userId,
         name: product.name,
-        priceKg: product.priceKg,
         price: product.price,
         quantity: product.quantity,
         image: product.image,

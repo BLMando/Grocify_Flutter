@@ -3,7 +3,6 @@ import '../utils/utils.dart';
 class ProductModel {
   final String id;
   final String name;
-  final double priceKg;
   final double price;
   final String quantity;
   final String image;
@@ -12,7 +11,6 @@ class ProductModel {
   ProductModel({
     required this.id,
     required this.name,
-    required this.priceKg,
     required this.price,
     required this.quantity,
     required this.image,
@@ -24,7 +22,6 @@ class ProductModel {
     return ProductModel(
       id: json['id'],
       name: Utils.capitalizeFirstLetter(json['nome'].toString()),
-      priceKg: double.tryParse(json['prezzo_al_kg']?.toString() ?? '') ?? 0.0,
       price: double.tryParse(json['prezzo_unitario']?.toString() ?? '') ?? 0.0,
       quantity: json['quantita']?.toString() ?? '',
       image: json['immagine']?.toString() ?? '',
@@ -37,7 +34,6 @@ class ProductModel {
     return {
       'id': id,
       'nome': name,
-      'prezzo_al_kg': priceKg,
       'prezzo_unitario': price,
       'quantita': quantity,
       'immagine': image,

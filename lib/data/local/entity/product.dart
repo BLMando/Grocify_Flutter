@@ -7,7 +7,6 @@ class Product {
   @primaryKey
   final String userId;
   final String name;
-  final double priceKg;
   final double price;
   final String quantity;
   late final int units;
@@ -18,7 +17,6 @@ class Product {
     required this.id,
     required this.userId,
     required this.name,
-    required this.priceKg,
     required this.price,
     required this.quantity,
     this.units = 1,
@@ -30,7 +28,6 @@ class Product {
     String? id,
     String? userId,
     String? name,
-    double? priceKg,
     double? price,
     String? quantity,
     int? units,
@@ -41,7 +38,6 @@ class Product {
       id: id ?? this.id,
       userId: userId ?? this.userId,
       name: name ?? this.name,
-      priceKg: priceKg ?? this.priceKg,
       price: price ?? this.price,
       quantity: quantity ?? this.quantity,
       units: units ?? this.units,

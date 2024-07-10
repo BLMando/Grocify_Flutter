@@ -100,7 +100,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Cart` (`userId` TEXT NOT NULL, `totalPrice` REAL NOT NULL, PRIMARY KEY (`userId`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Product` (`id` TEXT NOT NULL, `userId` TEXT NOT NULL, `name` TEXT NOT NULL, `priceKg` REAL NOT NULL, `price` REAL NOT NULL, `quantity` TEXT NOT NULL, `units` INTEGER NOT NULL, `image` TEXT NOT NULL, `discount` REAL NOT NULL, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `Product` (`id` TEXT NOT NULL, `userId` TEXT NOT NULL, `name` TEXT NOT NULL, `price` REAL NOT NULL, `quantity` TEXT NOT NULL, `units` INTEGER NOT NULL, `image` TEXT NOT NULL, `discount` REAL NOT NULL, PRIMARY KEY (`id`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -190,7 +190,6 @@ class _$ProductDao extends ProductDao {
                   'id': item.id,
                   'userId': item.userId,
                   'name': item.name,
-                  'priceKg': item.priceKg,
                   'price': item.price,
                   'quantity': item.quantity,
                   'units': item.units,
@@ -213,7 +212,6 @@ class _$ProductDao extends ProductDao {
             id: row['id'] as String,
             userId: row['userId'] as String,
             name: row['name'] as String,
-            priceKg: row['priceKg'] as double,
             price: row['price'] as double,
             quantity: row['quantity'] as String,
             units: row['units'] as int,
@@ -233,7 +231,6 @@ class _$ProductDao extends ProductDao {
             id: row['id'] as String,
             userId: row['userId'] as String,
             name: row['name'] as String,
-            priceKg: row['priceKg'] as double,
             price: row['price'] as double,
             quantity: row['quantity'] as String,
             units: row['units'] as int,
