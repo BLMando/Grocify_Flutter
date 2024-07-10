@@ -1,4 +1,4 @@
-package com.example.prova_flutter
+package com.example.grocify_flutter
 
 import io.flutter.embedding.android.FlutterActivity
 
