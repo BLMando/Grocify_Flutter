@@ -93,7 +93,7 @@ class CategoryItemsViewModel extends ChangeNotifier {
         image: product.image,
         units: 1,
         discount: product.discount,
-        );
+      );
 
       await productDao.insertProduct(productToAdd);
     }

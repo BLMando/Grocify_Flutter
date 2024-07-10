@@ -213,9 +213,6 @@ class CategoryItemState extends State<CategoryItemCard>{
                 child: ElevatedButton(
                   onPressed: () {
                     widget.viewModel.addToCart(widget.product);
-                    /*if (!isAddingToCart) {
-                      updateState();
-                    }*/
                   },
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white,
