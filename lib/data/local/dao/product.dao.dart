@@ -1,6 +1,7 @@
 import 'package:floor/floor.dart';
 import '../entity/product.dart';
 
+///Data Access Object for the Product table.
 @dao
 abstract class ProductDao {
   @insert

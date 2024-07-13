@@ -9,7 +9,7 @@ import '../firebase/firestore.service.dart';
 import '../models/user.details.model.dart';
 import 'package:intl/intl.dart';
 
-
+/// ViewModel class for managing the products in a user cart.
 class CartViewModel extends ChangeNotifier{
 
   final FirestoreService _firestoreService = FirestoreService();
@@ -28,6 +28,8 @@ class CartViewModel extends ChangeNotifier{
   bool get flagSelectedAddress => _flagSelectedAddress;
   String get orderId => _orderId;
 
+  /// Function that initializes the variables contained in the floor db and also
+  /// initializes [_totalPrice] and [_productsList] and notifies listeners.
   Future<void> initializeProductsList() async {
     final userId = _authService.currentUser!.uid;
 
@@ -52,7 +54,8 @@ class CartViewModel extends ChangeNotifier{
     notifyListeners();
   }
 
-
+  /// Function that updates the number of units of a specific product in the product list of the cart,
+  /// it also updates the total price of the cart.
   Future<void> addValueToProductUnits(Product product, int value) async {
     if(value < 0){
       if (product.units > 1){
@@ -105,6 +108,7 @@ class CartViewModel extends ChangeNotifier{
     }
   }
 
+  /// Function to remove a product from the products list of the cart given the product.
   Future<void> removeFromCart(Product product) async {
     final userId = _authService.currentUser!.uid;
 
@@ -123,6 +127,8 @@ class CartViewModel extends ChangeNotifier{
     notifyListeners();
     }
 
+  /// Function to check if a user has selected an address as the main one, if it has [_addressSelected] is initialized,
+  /// and this flag [_flagSelectedAddress] is set to true.
   Future<void> getSelectedAddress() async {
     List<AddressModel> addresses;
 
@@ -152,6 +158,7 @@ class CartViewModel extends ChangeNotifier{
     }
   }
 
+  /// Function to check if a user has an order in progress, if it has this flag [_flagOrder] is set to true.
   Future<void> checkOrders() async {
     List<OrderModel> orders = [];
 
@@ -175,7 +182,7 @@ class CartViewModel extends ChangeNotifier{
     }
   }
 
-
+  /// Function to create a new order for the user if it has a selected address and there aren't any other orders in progress.
   Future<void> createNewOrder() async {
     final userId = _authService.currentUser!.uid;
 
@@ -232,7 +239,7 @@ class CartViewModel extends ChangeNotifier{
     notifyListeners();
   }
 
-
+  /// Function to insert the order in the firestore db.
   Future<void> addOrder(OrderModel order) async {
     try {
         var document = await _firestoreService.addDocument(
@@ -256,13 +263,14 @@ class CartViewModel extends ChangeNotifier{
   }
 
 
-
+  /// Function to get the units of a product given its id.
   int getUnitsById(String id) {
     final index = _productsList.indexWhere((product) => product.id == id);
 
     return _productsList[index].units;
   }
 
+  /// Function to get the index of a product given its id.
   int getIndexById(String id) {
     return _productsList.indexWhere((product) => product.id == id);
   }

@@ -1,6 +1,7 @@
 import 'package:floor/floor.dart';
 import '../entity/cart.dart';
 
+///Data Access Object for the Cart table.
 @dao
 abstract class CartDao {
   @Insert(onConflict: OnConflictStrategy.replace)

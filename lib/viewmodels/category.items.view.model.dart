@@ -68,7 +68,7 @@ class CategoryItemsViewModel extends ChangeNotifier {
     }
   }
 
-
+  /// Function to add the product selected by the user to the floor db.
   Future<void> addToCart(ProductModel product) async {
     final userId = _authService.currentUser!.uid;
 
@@ -101,6 +101,7 @@ class CategoryItemsViewModel extends ChangeNotifier {
     await cartDao.addValueToTotalPrice(userId, price * (100.0 - product.discount) / 100.0);
   }
 
+  /// Function that initializes the variables for the floor db that will be used to display the cart.
   Future<void> initializeProductsList() async {
     final userId = _authService.currentUser!.uid;
 
